@@ -1,4 +1,4 @@
-package org.kruskopf.tictactoe;
+package org.kruskopf.tictactoe.model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

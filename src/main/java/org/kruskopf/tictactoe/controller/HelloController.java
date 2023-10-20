@@ -1,4 +1,4 @@
-package org.kruskopf.tictactoe;
+package org.kruskopf.tictactoe.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,7 +20,4 @@ public class HelloController {
         button1.setText("Label was Here!");
     }
 
-    public void mouseOverLabel(MouseEvent mouseEvent) {
-        button1.setText("Mouse coords: x=" + mouseEvent.getX() + "y=" + mouseEvent.getY());
-    }
 }
