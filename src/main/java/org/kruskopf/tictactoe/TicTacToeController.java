@@ -46,7 +46,7 @@ public class TicTacToeController {
     private Text winner;
     private int playerTurn = 0;
 
-    public void initialize(URL url, ResourceBundle  resourceBundle) {
+    public void initialize() {
         buttons = new ArrayList<>(Arrays.asList(button1,button2,button3,button4,button5,button6,button7,button8,button9));
 
         buttons.forEach(this::setButtonProperties);
@@ -55,7 +55,7 @@ public class TicTacToeController {
 
 
     public void setButtonProperties(Button button) {
-        button.setOnMouseClicked(event -> setSymbolAndDisable(button));
+        button.setOnAction(event -> setSymbolAndDisable(button));
         button.setFocusTraversable(false);
     }
 

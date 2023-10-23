@@ -7,7 +7,7 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kruskopf.tictactoe.TicTacToeController">
    <FlowPane alignment="CENTER" layoutX="100.0" layoutY="100.0" prefHeight="300.0" prefWidth="300.0">
-      <Button alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button1" />
+      <Button alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button1"/>
       <Button alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button2"/>
       <Button alignment="TOP_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button3"/>
       <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button4"/>
