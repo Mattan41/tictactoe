@@ -1,5 +1,6 @@
 package org.kruskopf.tictactoe;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -64,10 +65,10 @@ public class TicTacToeController {
     private void setSymbol(Button button) {
         //Todo: skapa metod för att sätta symbol X eller O i model?
     }
-
     private void checkGameOver() {
         //Todo: skapa metod i model kolla tre i rad av lika. switch??
     }
+
     private void restartGame() {
         //ToDO: skapa metod och knapp för att starta om spelet
     }
