@@ -103,6 +103,7 @@ public class TicTacToeController {
     @FXML
     private void restartGame(ActionEvent event) {
         buttons.forEach(this::resetButton);
+        winner.setText("Tic-Tac-Toe");
     }
 
     private void resetButton(Button button) {
