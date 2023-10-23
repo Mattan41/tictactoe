@@ -53,7 +53,6 @@ public class TicTacToeController {
 
     }
 
-
     public void setButtonProperties(Button button) {
         button.setOnAction(event -> setSymbolAndDisable(button));
         button.setFocusTraversable(false);
