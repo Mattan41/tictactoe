@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-
-<VBox xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kruskopf.tictactoe.TicTacToeController">
-   <children>
-      <AnchorPane prefHeight="300.0" prefWidth="300.0">
-         <FlowPane prefHeight="300.0" prefWidth="300.0">
-
-            <Button alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0"  text=" " textAlignment="CENTER"/>
-            <Button alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" />
-            <Button alignment="TOP_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" />
-            <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" />
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" />
-            <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" />
-            <Button alignment="BOTTOM_LEFT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" />
-            <Button alignment="BOTTOM_CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" />
-            <Button alignment="BOTTOM_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" />
-         </FlowPane>
-      </AnchorPane>
-   </children>
-</VBox>
+<AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kruskopf.tictactoe.TicTacToeController">
+   <FlowPane alignment="CENTER" layoutX="100.0" layoutY="100.0" prefHeight="300.0" prefWidth="300.0">
+      <Button alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button1" />
+      <Button alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button2"/>
+      <Button alignment="TOP_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button3"/>
+      <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button4"/>
+      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button5"/>
+      <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button6"/>
+      <Button alignment="BOTTOM_LEFT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button7"/>
+      <Button alignment="BOTTOM_CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button8"/>
+      <Button alignment="BOTTOM_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button9"/>
+   </FlowPane>
+   <Button layoutX="211.0" layoutY="427.0" mnemonicParsing="false" text="Ny omgång" />
+   <ChoiceBox layoutX="169.0" layoutY="62.0" prefWidth="150.0" />
+   <Text layoutX="160.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" fx:id="winner" text="Tic-Tac-Toe">
+      <font>
+         <Font name="Comic Sans MS Bold Italic" size="27.0" />
+      </font>
+      <effect>
+         <Glow />
+      </effect>
+   </Text>
+</AnchorPane>
