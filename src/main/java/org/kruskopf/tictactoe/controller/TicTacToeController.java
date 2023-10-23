@@ -5,7 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
-public class HelloController {
+public class TicTacToeController {
     public Button button1;
     @FXML
     private Label welcomeText;
