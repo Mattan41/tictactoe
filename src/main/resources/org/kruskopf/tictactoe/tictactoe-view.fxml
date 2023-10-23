@@ -2,14 +2,14 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kruskopf.tictactoe.controller.TicTacToeController">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kruskopf.tictactoe.TicTacToeController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
-    <Label fx:id="welcomeText" onMouseClicked="#onLabelClicked" />
    <GridPane>
      <columnConstraints>
        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -22,16 +22,15 @@
        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
      </rowConstraints>
       <children>
-         <Button mnemonicParsing="false" text="Button" GridPane.rowIndex="1" />
-          <Button fx:id="button1" onAction="#onHelloButtonClick" text="Hello" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-         <Button mnemonicParsing="false" text="Button" />
-         <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="1" />
-         <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-         <Button mnemonicParsing="false" text="Button" GridPane.rowIndex="2" />
-         <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="2" />
-         <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-         <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#imageClicked"/>
+         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="10.0" layoutY="-50.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" onMouseClicked="#imageClicked"/>
+         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="10.0" layoutY="-50.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" onMouseClicked="#imageClicked"/>
+         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="10.0" layoutY="-50.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" onMouseClicked="#imageClicked"/>
+         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="110.0" layoutY="-50.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" onMouseClicked="#imageClicked"/>
+         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="110.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" onMouseClicked="#imageClicked" />
+         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="110.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" onMouseClicked="#imageClicked"/>
+         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="210.0" layoutY="-50.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" onMouseClicked="#imageClicked"/>
+         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="210.0" layoutY="-20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" onMouseClicked="#imageClicked"/>
        </children>
    </GridPane>
-
 </VBox>
