@@ -100,12 +100,14 @@ public class TicTacToeController {
 
     }
 
-    private void restartGame() {
-        //ToDO: skapa metod och knapp för att starta om spelet
+    @FXML
+    private void restartGame(ActionEvent event) {
+        buttons.forEach(this::resetButton);
     }
 
-    private void resetButtons() {
-        //todo reset buttons
+    private void resetButton(Button button) {
+        button.setDisable(false);
+        button.setText("");
     }
 
     private void pointsTracker() {

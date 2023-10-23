@@ -17,7 +17,7 @@
       <Button alignment="BOTTOM_CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button8"/>
       <Button alignment="BOTTOM_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text=" " textAlignment="CENTER" fx:id="button9"/>
    </FlowPane>
-   <Button layoutX="211.0" layoutY="427.0" mnemonicParsing="false" text="Ny omgång" />
+   <Button layoutX="211.0" layoutY="427.0" mnemonicParsing="false" onAction="#restartGame" text="Ny omgång" />
    <ChoiceBox layoutX="169.0" layoutY="62.0" prefWidth="150.0" />
    <Text layoutX="160.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" fx:id="winner" text="Tic-Tac-Toe">
       <font>
