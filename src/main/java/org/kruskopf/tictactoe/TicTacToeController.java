@@ -91,11 +91,17 @@ public class TicTacToeController {
                 default -> null;
 
             };
-            if(line.equals("XXX"))
+            if(line.equals("XXX")) {
                 winner.setText("X vann!");
+                buttons.forEach(this::disableButtons);
+            }
 
-            else if(line.equals("OOO"))
+
+            else if(line.equals("OOO")) {
                 winner.setText("O vann!");
+                buttons.forEach(this::disableButtons);
+            }
+
         }
 
     }
@@ -106,6 +112,9 @@ public class TicTacToeController {
         winner.setText("Tic-Tac-Toe");
     }
 
+    public void disableButtons (Button button){
+        button.setDisable(true);
+    }
     private void resetButton(Button button) {
         button.setDisable(false);
         button.setText("");
@@ -114,6 +123,8 @@ public class TicTacToeController {
     private void pointsTracker() {
         //TODO: poängräknare
     }
+
+
     //ToDo: computer controls player 2 in singleplayermode
     //TODO: SinglePlayer/MultiPlayer choice
     //TODo: Mutliplayer
