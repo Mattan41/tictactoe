@@ -64,6 +64,7 @@ public class TicTacToeController {
     private void restartGame(ActionEvent event) {
         buttons.forEach(model::resetButton);
         winner.setText("Tic-Tac-Toe");
+        newMatch.setDisable(true);
     }
 
     public void disableButtons (Button button){

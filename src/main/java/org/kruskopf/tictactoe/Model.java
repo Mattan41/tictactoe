@@ -17,6 +17,7 @@ public class Model {
     private StringProperty playerScore = new SimpleStringProperty("Player 1: "+ player1Score + " wins\nPlayer 2: " + player2Score + " wins");
 
     public Model(){
+
     }
 
     public String getPlayerScore() {
