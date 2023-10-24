@@ -1,5 +1,6 @@
 package org.kruskopf.tictactoe;
 
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -69,11 +70,8 @@ public class TicTacToeController {
         button.setDisable(true);
     }
 
-    private void pointsTracker() {
-        //TODO: poängräknare
-    }
-
-
+    //toDo: update wins after win
+    //toDo: refactor som code to model?
     //TODO: SinglePlayer/MultiPlayer choice
     //ToDo: computer controls player 2 in singlePlayerMode
     //TODo: MultiPlayer

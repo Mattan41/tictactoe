@@ -17,8 +17,8 @@ public class Model {
     private StringProperty playerScore = new SimpleStringProperty("Player 1: "+ player1Score + " wins\nPlayer 2: " + player2Score + " wins");
 
     public Model(){
-
     }
+
     public String getPlayerScore() {
         return playerScore.get();
     }
@@ -53,7 +53,7 @@ public class Model {
                 player1Score++;
                 playerTurn = PlayerTurn.PLAYER1;
                 setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +"points");
-
+                //ToDO: breakout methods
 
                 break;
             }
@@ -63,7 +63,9 @@ public class Model {
                 ticTacToeController.newMatch.setDisable(false);
                 player2Score++;
                 setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +"points");
+                //ToDO: breakout methods
                 break;
+
             }
         }
     }
