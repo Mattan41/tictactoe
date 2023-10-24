@@ -39,7 +39,7 @@ public class TicTacToeController {
     List<Button> buttons;
     @FXML
     public Text winner;
-    public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
+
     public Button newMatch;
 
     public void initialize() {
@@ -54,7 +54,7 @@ public class TicTacToeController {
     }
 
     private void setSymbolAndDisable(Button button) {
-        model.setSymbol(button, this);
+        model.setSymbol(button);
         button.setDisable(true);
         model.checkGameOver(this);
     }
@@ -74,11 +74,9 @@ public class TicTacToeController {
     }
 
 
-    //ToDo: computer controls player 2 in singlePlayerMode
     //TODO: SinglePlayer/MultiPlayer choice
+    //ToDo: computer controls player 2 in singlePlayerMode
     //TODo: MultiPlayer
-    public enum PlayerTurn {
-        PLAYER1, PLAYER2
-    }
+
 
 }

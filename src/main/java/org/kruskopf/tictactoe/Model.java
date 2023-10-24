@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class Model {
 
-
+    public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
     void checkGameOver(TicTacToeController ticTacToeController) {
         for (int i = 0; i < 8; i++) {
             String line = switch (i){
@@ -44,19 +44,23 @@ public class Model {
     }
 
 
-    void setSymbol(Button button, TicTacToeController ticTacToeController) {
-        if (TicTacToeController.playerTurn == TicTacToeController.PlayerTurn.PLAYER1){
+    void setSymbol(Button button) {
+        if (playerTurn == PlayerTurn.PLAYER1){
             button.setText("X");
-            TicTacToeController.playerTurn = TicTacToeController.PlayerTurn.PLAYER2;
+            playerTurn =PlayerTurn.PLAYER2;
         }
         else{
             button.setText("O");
-            TicTacToeController.playerTurn = TicTacToeController.PlayerTurn.PLAYER1;
+            playerTurn = PlayerTurn.PLAYER1;
         }
     }
 
     void resetButton(Button button) {
         button.setDisable(false);
         button.setText("");
+    }
+
+    public enum PlayerTurn {
+        PLAYER1, PLAYER2
     }
 }
