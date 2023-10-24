@@ -1,11 +1,7 @@
 package org.kruskopf.tictactoe;
 
-import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 
@@ -15,8 +11,30 @@ import java.util.Random;
 public class Model {
 
     public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
+
+    int player1Score = 0;
+    int player2Score = 0;
+    private StringProperty playerScore = new SimpleStringProperty("Player 1: "+ player1Score + " wins\nPlayer 2: " + player2Score + " wins");
+
+    public Model(){
+
+    }
+    public String getPlayerScore() {
+        return playerScore.get();
+    }
+
+    public StringProperty PlayerScoreProperty() {
+        return playerScore;
+    }
+
+    public void setPlayerScore(String playerScore) {
+        this.playerScore.set(playerScore);
+    }
+
+
     void checkGameOver(TicTacToeController ticTacToeController) {
         for (int i = 0; i < 8; i++) {
+
             String line = switch (i){
                 case 0 -> ticTacToeController.button1.getText()+ ticTacToeController.button2.getText()+ ticTacToeController.button3.getText();
                 case 1 -> ticTacToeController.button4.getText()+ ticTacToeController.button5.getText()+ ticTacToeController.button6.getText();
@@ -29,15 +47,22 @@ public class Model {
                 default -> null;
             };
             if(line.equals("XXX")) {
-                ticTacToeController.winner.setText("Player X won!");
+                ticTacToeController.winner.setText("Player 1 won!");
                 ticTacToeController.buttons.forEach(ticTacToeController::disableButtons);
                 ticTacToeController.newMatch.setDisable(false);
+                player1Score++;
+                playerTurn = PlayerTurn.PLAYER1;
+                setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +"points");
+
+
                 break;
             }
             else if(line.equals("OOO")) {
-                ticTacToeController.winner.setText("Player O won!");
+                ticTacToeController.winner.setText("Player 2 won!");
                 ticTacToeController.buttons.forEach(ticTacToeController::disableButtons);
                 ticTacToeController.newMatch.setDisable(false);
+                player2Score++;
+                setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +"points");
                 break;
             }
         }
