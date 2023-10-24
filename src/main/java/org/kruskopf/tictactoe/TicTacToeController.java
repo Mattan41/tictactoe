@@ -1,9 +1,11 @@
 package org.kruskopf.tictactoe;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
@@ -16,10 +18,13 @@ public class TicTacToeController {
     public Model getModel() {
         return model;
     }
+    @FXML
+    private Label playerScoreLabel;
 
 
     @FXML
     public Button button1;
+
     @FXML
     public Button button2;
     @FXML
@@ -36,17 +41,16 @@ public class TicTacToeController {
     public Button button8;
     @FXML
     public Button button9;
-
     List<Button> buttons;
+
     @FXML
     public Text winner;
-
     public Button newMatch;
 
     public void initialize() {
         buttons = new ArrayList<>(Arrays.asList(button1,button2,button3,button4,button5,button6,button7,button8,button9));
         buttons.forEach(this::setButtonProperties);
-
+        playerScoreLabel.textProperty().bind(model.PlayerScoreProperty());
     }
 
     public void setButtonProperties(Button button) {

@@ -14,10 +14,9 @@ public class Model {
 
     int player1Score = 0;
     int player2Score = 0;
-    private StringProperty playerScore = new SimpleStringProperty("Player 1: "+ player1Score + " wins\nPlayer 2: " + player2Score + " wins");
+    private StringProperty playerScore = new SimpleStringProperty("Player 1: " + player1Score + " wins\nPlayer 2: " + player2Score + " wins");
 
-    public Model(){
-
+    public Model() {
     }
 
     public String getPlayerScore() {
@@ -53,7 +52,7 @@ public class Model {
                 ticTacToeController.newMatch.setDisable(false);
                 player1Score++;
                 playerTurn = PlayerTurn.PLAYER1;
-                setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +"points");
+                setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
                 //ToDO: breakout methods
 
                 break;
@@ -63,7 +62,7 @@ public class Model {
                 ticTacToeController.buttons.forEach(ticTacToeController::disableButtons);
                 ticTacToeController.newMatch.setDisable(false);
                 player2Score++;
-                setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +"points");
+                setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
                 //ToDO: breakout methods
                 break;
 
