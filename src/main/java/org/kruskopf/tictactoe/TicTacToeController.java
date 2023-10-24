@@ -39,7 +39,7 @@ public class TicTacToeController {
     List<Button> buttons;
     @FXML
     public Text winner;
-    public int playerTurn = 0;
+    public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
     public Button newMatch;
 
     public void initialize() {
@@ -77,4 +77,8 @@ public class TicTacToeController {
     //ToDo: computer controls player 2 in singlePlayerMode
     //TODO: SinglePlayer/MultiPlayer choice
     //TODo: MultiPlayer
+    public enum PlayerTurn {
+        PLAYER1, PLAYER2
+    }
+
 }

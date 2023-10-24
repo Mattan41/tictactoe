@@ -45,13 +45,13 @@ public class Model {
 
 
     void setSymbol(Button button, TicTacToeController ticTacToeController) {
-        if (ticTacToeController.playerTurn % 2 == 0){
+        if (TicTacToeController.playerTurn == TicTacToeController.PlayerTurn.PLAYER1){
             button.setText("X");
-            ticTacToeController.playerTurn = 1;
+            TicTacToeController.playerTurn = TicTacToeController.PlayerTurn.PLAYER2;
         }
         else{
             button.setText("O");
-            ticTacToeController.playerTurn = 0;
+            TicTacToeController.playerTurn = TicTacToeController.PlayerTurn.PLAYER1;
         }
     }
 
