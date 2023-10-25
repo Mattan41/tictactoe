@@ -75,7 +75,7 @@ public class TicTacToeController {
         button.setDisable(true);
     }
 
-    //toDo: update wins after win
+    //toDo: add tests
     //toDo: refactor som code to model?
     //TODO: SinglePlayer/MultiPlayer choice
     //ToDo: computer controls player 2 in singlePlayerMode

@@ -48,25 +48,27 @@ public class Model {
             };
             if(line.equals("XXX")) {
                 ticTacToeController.winner.setText("Player 1 won!");
+                player1Score++;
                 ticTacToeController.buttons.forEach(ticTacToeController::disableButtons);
                 ticTacToeController.newMatch.setDisable(false);
-                player1Score++;
                 playerTurn = PlayerTurn.PLAYER1;
                 setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
+
                 //ToDO: breakout methods
 
                 break;
             }
             else if(line.equals("OOO")) {
                 ticTacToeController.winner.setText("Player 2 won!");
+                player2Score++;
                 ticTacToeController.buttons.forEach(ticTacToeController::disableButtons);
                 ticTacToeController.newMatch.setDisable(false);
-                player2Score++;
                 setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
                 //ToDO: breakout methods
                 break;
 
             }
+            //ToDO: add draw
         }
     }
 
