@@ -48,8 +48,12 @@ public class TicTacToeController {
     public Button newMatch;
     private Model model;
 
+    private String mode;
+
+
+
     public Model getModel() {
-        return model;
+        return this.model;
     }
 
     public void initialize() {
@@ -61,11 +65,10 @@ public class TicTacToeController {
     }
 
     public void startGame() {
-        String mode = gameMode.getValue();
+        mode = gameMode.getValue();
 
             if (mode.equals("Single Player")) {
                 model = new Model(true);
-
                 model.ifComputerTurn(this);
             } else if (mode.equals("Multiplayer")) {
                 model = new Model(false);
@@ -76,31 +79,7 @@ public class TicTacToeController {
 
             playerScoreLabel.textProperty().bind(model.PlayerScoreProperty());
 
-    }
 
-    public void makeMove(ActionEvent event) {
-        Button button = (Button) event.getSource();
-        int row = GridPane.getRowIndex(button);
-        int col = GridPane.getColumnIndex(button);
-        String player = model.getCurrentPlayer();
-        button.setText(player);
-        model.makeMove(row, col, player);
-
-        if (model.isGameOver()) {
-            // Game over
-            // ...
-        } else if (model.isComputerTurn()) {
-            int[] move = model.getNextMove();
-            row = move[0];
-            col = move[1];
-            button = getButton(row, col);
-            button.setText("O");
-            model.makeMove(row, col, "O");
-            if (model.isGameOver()) {
-                // Game over
-                // ...
-            }
-        }
     }
 
     public Button getButton(int row, int col) {
@@ -112,17 +91,6 @@ public class TicTacToeController {
         return null;
     }
 
-    private int[] getNextMove() {
-        int[] move = new int[2];
-        Random random = new Random();
-        do {
-            int index = random.nextInt(board.size());
-            Button button = board.get(index);
-            move[0] = GridPane.getRowIndex(button);
-            move[1] = GridPane.getColumnIndex(button);
-        } while (!isEmpty(move[0], move[1]));
-        return move;
-    }
 
     private boolean isEmpty(int row, int col) {
         Button button = getButton(row, col);
@@ -136,7 +104,7 @@ public class TicTacToeController {
         button.setFocusTraversable(false);
     }
 
-    private void setSymbolAndDisable(Button button) {
+    public void setSymbolAndDisable(Button button) {
         model.setSymbol(button);
         button.setDisable(true);
         model.checkGameOver(this);
@@ -156,8 +124,13 @@ public class TicTacToeController {
         button.setDisable(false);
     }
 
-    //TODO: SinglePlayer/MultiPlayer choice
+    public String getMode() {
+        return this.mode;
+    }
+
+
     //ToDo: computer controls player 2 in singlePlayerMode
+    //ToDO: draw
     //toDo: add tests
     //TODo: MultiPlayer
 

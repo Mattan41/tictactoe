@@ -2,10 +2,10 @@ package org.kruskopf.tictactoe;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-
-import java.lang.annotation.Retention;
+import javafx.stage.Window;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -20,7 +20,7 @@ public class Model {
 
     private ArrayList<Button> board;
     private boolean singlePlayer;
-
+    private int boardcount;
     private Random random;
 
     public Model(boolean singlePlayer) {
@@ -49,11 +49,13 @@ public class Model {
 
     public boolean isGameOver() {
         return board.stream().anyMatch(button -> !button.isDisabled());
-        //ToDo: denna verkar inte fungera
+        //ToDo: Draw -  denna verkar inte fungera. med allMatch så blir det draw på första klicket.
     }
+
 
     private boolean isEmpty(int row, int col) {
         Button button = getButton(row, col);
+        assert button != null;
         return button.getText().isEmpty();
     }
 
@@ -90,49 +92,42 @@ public class Model {
 
 
     void checkGameOver(TicTacToeController ticTacToeController) {
-        for (int i = 0; i < 8; i++) {
+        if (boardcount==9){
+            ticTacToeController.winner.setText("It's a draw!");
+            matchOver(ticTacToeController);
+        }
+        else
+            for (int i = 0; i < 8; i++) {
 
-            String line = switch (i){
-                case 0 -> ticTacToeController.button1.getText()+ ticTacToeController.button2.getText()+ ticTacToeController.button3.getText();
-                case 1 -> ticTacToeController.button4.getText()+ ticTacToeController.button5.getText()+ ticTacToeController.button6.getText();
-                case 2 -> ticTacToeController.button7.getText()+ ticTacToeController.button8.getText()+ ticTacToeController.button9.getText();
-                case 3 -> ticTacToeController.button1.getText()+ ticTacToeController.button4.getText()+ ticTacToeController.button7.getText();
-                case 4 -> ticTacToeController.button2.getText()+ ticTacToeController.button5.getText()+ ticTacToeController.button8.getText();
-                case 5 -> ticTacToeController.button3.getText()+ ticTacToeController.button6.getText()+ ticTacToeController.button9.getText();
-                case 6 -> ticTacToeController.button1.getText()+ ticTacToeController.button5.getText()+ ticTacToeController.button9.getText();
-                case 7 -> ticTacToeController.button3.getText()+ ticTacToeController.button5.getText()+ ticTacToeController.button7.getText();
-                default -> null;
-            };
-            if(line.equals("XXX")) {
-                ticTacToeController.winner.setText("Player 1 won!");
-                player1Score++;
-                matchOver(ticTacToeController);
+                String line = switch (i){
+                    case 0 -> ticTacToeController.button1.getText()+ ticTacToeController.button2.getText()+ ticTacToeController.button3.getText();
+                    case 1 -> ticTacToeController.button4.getText()+ ticTacToeController.button5.getText()+ ticTacToeController.button6.getText();
+                    case 2 -> ticTacToeController.button7.getText()+ ticTacToeController.button8.getText()+ ticTacToeController.button9.getText();
+                    case 3 -> ticTacToeController.button1.getText()+ ticTacToeController.button4.getText()+ ticTacToeController.button7.getText();
+                    case 4 -> ticTacToeController.button2.getText()+ ticTacToeController.button5.getText()+ ticTacToeController.button8.getText();
+                    case 5 -> ticTacToeController.button3.getText()+ ticTacToeController.button6.getText()+ ticTacToeController.button9.getText();
+                    case 6 -> ticTacToeController.button1.getText()+ ticTacToeController.button5.getText()+ ticTacToeController.button9.getText();
+                    case 7 -> ticTacToeController.button3.getText()+ ticTacToeController.button5.getText()+ ticTacToeController.button7.getText();
+                    default -> null;
+                };
+                if (line.equals("XXX")) {
+                    ticTacToeController.winner.setText("Player 1 won!");
+                    player1Score++;
+                    matchOver(ticTacToeController);
+                    break;
+                }
+                else if(line.equals("OOO")) {
+                    ticTacToeController.winner.setText("Player 2 won!");
+                    player2Score++;
+                    matchOver(ticTacToeController);
+                    break;
 
-
-
-                break;
-            }
-            else if(line.equals("OOO")) {
-                ticTacToeController.winner.setText("Player 2 won!");
-                player2Score++;
-                matchOver(ticTacToeController);
-
-                break;
-
-            }
-            if (isGameOver()){
-                ticTacToeController.winner.setText("It's a draw!");
-                matchOver(ticTacToeController);
-
-                break;
-            }
-
-
+                }
         }
     }
 
 
-    private void matchOver(TicTacToeController ticTacToeController) {
+    public void matchOver(TicTacToeController ticTacToeController) {
         ticTacToeController.board.forEach(ticTacToeController::disableButtons);
         ticTacToeController.newMatch.setDisable(false);
         playerTurn = PlayerTurn.PLAYER1;
@@ -141,16 +136,18 @@ public class Model {
 
 
     void setSymbol(Button button) {
-
-        if (playerTurn == PlayerTurn.PLAYER1){
+        if (playerTurn == PlayerTurn.PLAYER1) {
             button.setText("X");
-            playerTurn =PlayerTurn.PLAYER2;
+            boardcount++;
+            playerTurn = PlayerTurn.PLAYER2;
         }
-        else{
+         else {
             button.setText("O");
+            boardcount++;
             playerTurn = PlayerTurn.PLAYER1;
         }
     }
+
 
     void resetButton(Button button) {
         button.setDisable(false);
@@ -165,6 +162,24 @@ public class Model {
             Button button = ticTacToeController.getButton(row, col);
             button.setText("O");
             makeMove(row, col, "O");
+            playerTurn = PlayerTurn.PLAYER1;
+        }
+    }
+    public void computerMove(TicTacToeController ticTacToeController) {
+        if (isComputerTurn()) {
+            Random rand = new Random();
+            int index = rand.nextInt(9);
+            Button button = board.get(index);
+            while (button.isDisabled()) {
+                index = rand.nextInt(9);
+                button = board.get(index);
+            }
+            ticTacToeController.setSymbolAndDisable(button);
+
+            if (!isGameOver()) {
+                playerTurn = PlayerTurn.PLAYER1;
+            }
+            matchOver(ticTacToeController);
         }
     }
 
