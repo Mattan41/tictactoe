@@ -2,11 +2,8 @@ package org.kruskopf.tictactoe;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-
-import java.util.List;
-import java.util.Random;
 
 public class Model {
 
@@ -49,22 +46,17 @@ public class Model {
             if(line.equals("XXX")) {
                 ticTacToeController.winner.setText("Player 1 won!");
                 player1Score++;
-                ticTacToeController.buttons.forEach(ticTacToeController::disableButtons);
-                ticTacToeController.newMatch.setDisable(false);
-                playerTurn = PlayerTurn.PLAYER1;
-                setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
+                matchOver(ticTacToeController);
 
-                //ToDO: breakout methods
+
 
                 break;
             }
             else if(line.equals("OOO")) {
                 ticTacToeController.winner.setText("Player 2 won!");
                 player2Score++;
-                ticTacToeController.buttons.forEach(ticTacToeController::disableButtons);
-                ticTacToeController.newMatch.setDisable(false);
-                setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
-                //ToDO: breakout methods
+                matchOver(ticTacToeController);
+
                 break;
 
             }
@@ -73,7 +65,16 @@ public class Model {
     }
 
 
+    private void matchOver(TicTacToeController ticTacToeController) {
+        ticTacToeController.buttons.forEach(ticTacToeController::disableButtons);
+        ticTacToeController.newMatch.setDisable(false);
+        playerTurn = PlayerTurn.PLAYER1;
+        setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
+    }
+
+
     void setSymbol(Button button) {
+
         if (playerTurn == PlayerTurn.PLAYER1){
             button.setText("X");
             playerTurn =PlayerTurn.PLAYER2;
@@ -92,4 +93,5 @@ public class Model {
     public enum PlayerTurn {
         PLAYER1, PLAYER2
     }
+
 }
