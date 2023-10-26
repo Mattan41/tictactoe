@@ -2,19 +2,79 @@ package org.kruskopf.tictactoe;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
+
+import java.lang.annotation.Retention;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Model {
 
     public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
 
     int player1Score = 0;
+
     int player2Score = 0;
     private StringProperty playerScore = new SimpleStringProperty("Player 1: " + player1Score + " wins\nPlayer 2: " + player2Score + " wins");
 
-    public Model() {
+    private ArrayList<Button> board;
+    private boolean singlePlayer;
+
+    private Random random;
+
+    public Model(boolean singlePlayer) {
+        this.singlePlayer = singlePlayer;
+        board = new ArrayList<>();
+        random = new Random();
     }
+
+    public void makeMove(int row, int col, String player) {
+        Button button = getButton(row, col);
+        button.setText(player);
+    }
+
+    public boolean isComputerTurn() {
+        return singlePlayer && getCurrentPlayer().equals("O");
+    }
+
+    public int[] getNextMove() {
+        int[] move = new int[2];
+        do {
+            move[0] = random.nextInt(3);
+            move[1] = random.nextInt(3);
+        } while (!isEmpty(move[0], move[1]));
+        return move;
+    }
+
+    public boolean isGameOver() {
+        return board.stream().anyMatch(button -> !button.isDisabled());
+        //ToDo: denna verkar inte fungera
+    }
+
+    private boolean isEmpty(int row, int col) {
+        Button button = getButton(row, col);
+        return button.getText().isEmpty();
+    }
+
+    private Button getButton(int row, int col) {
+        for (Button button : board) {
+            if (GridPane.getRowIndex(button) == row && GridPane.getColumnIndex(button) == col) {
+                return button;
+            }
+        }
+        return null;
+    }
+
+    public String getCurrentPlayer() {
+
+        if (playerTurn == PlayerTurn.PLAYER1){
+            return "X";
+        }
+        else return "O";
+    }
+
+
 
     public String getPlayerScore() {
         return playerScore.get();
@@ -60,13 +120,20 @@ public class Model {
                 break;
 
             }
-            //ToDO: add draw
+            if (isGameOver()){
+                ticTacToeController.winner.setText("It's a draw!");
+                matchOver(ticTacToeController);
+
+                break;
+            }
+
+
         }
     }
 
 
     private void matchOver(TicTacToeController ticTacToeController) {
-        ticTacToeController.buttons.forEach(ticTacToeController::disableButtons);
+        ticTacToeController.board.forEach(ticTacToeController::disableButtons);
         ticTacToeController.newMatch.setDisable(false);
         playerTurn = PlayerTurn.PLAYER1;
         setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
@@ -88,6 +155,17 @@ public class Model {
     void resetButton(Button button) {
         button.setDisable(false);
         button.setText("");
+    }
+
+    void ifComputerTurn(TicTacToeController ticTacToeController) {
+        if (isComputerTurn()) {
+            int[] move = getNextMove();
+            int row = move[0];
+            int col = move[1];
+            Button button = ticTacToeController.getButton(row, col);
+            button.setText("O");
+            makeMove(row, col, "O");
+        }
     }
 
     public enum PlayerTurn {
