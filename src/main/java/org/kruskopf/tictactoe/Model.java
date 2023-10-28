@@ -133,6 +133,7 @@ public class Model {
         playerTurn = PlayerTurn.PLAYER1;
         boardcount=0;
         setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
+        boardcount=0;
     }
 
 

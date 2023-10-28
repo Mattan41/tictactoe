@@ -129,6 +129,7 @@ public class TicTacToeController {
     }
 
     //TODO: REFACTOR, move metods to Model, add properties, reference buttons to array in Model. class board?
+
     //ToDo: computer controls player 2 in singlePlayerMode
     //ToDO: draw
     //toDo: add tests
