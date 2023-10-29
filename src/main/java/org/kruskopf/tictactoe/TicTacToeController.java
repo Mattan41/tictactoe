@@ -61,8 +61,6 @@ public class TicTacToeController {
         /*board = new ArrayList<>(Arrays.asList(button1,button2,button3,button4,button5,button6,button7,button8,button9));
         board.forEach(this::setButtonProperties);
         board.forEach(this::disableButtons);
-
-
          */
         gameMode.setOnAction(event -> startGame());
 
@@ -80,26 +78,26 @@ public class TicTacToeController {
 
         }
 
-        Bindings.bindBidirectional(model.getBoard()[0].disableProperty(), model.disableProperty());
-        Bindings.bindBidirectional(model.getBoard()[1].disableProperty(), model.disableProperty());
-        Bindings.bindBidirectional(model.getBoard()[2].disableProperty(), model.disableProperty());
-        Bindings.bindBidirectional(model.getBoard()[3].disableProperty(), model.disableProperty());
-        Bindings.bindBidirectional(model.getBoard()[4].disableProperty(), model.disableProperty());
-        Bindings.bindBidirectional(model.getBoard()[5].disableProperty(), model.disableProperty());
-        Bindings.bindBidirectional(model.getBoard()[6].disableProperty(), model.disableProperty());
-        Bindings.bindBidirectional(model.getBoard()[7].disableProperty(), model.disableProperty());
-        Bindings.bindBidirectional(model.getBoard()[8].disableProperty(), model.disableProperty());
+        Bindings.bindBidirectional(button1.disableProperty(), model.getBoard()[0].disableProperty());
+        Bindings.bindBidirectional(button2.disableProperty(), model.getBoard()[1].disableProperty());
+        Bindings.bindBidirectional(button3.disableProperty(), model.getBoard()[2].disableProperty());
+        Bindings.bindBidirectional(button4.disableProperty(), model.getBoard()[3].disableProperty());
+        Bindings.bindBidirectional(button5.disableProperty(), model.getBoard()[4].disableProperty());
+        Bindings.bindBidirectional(button6.disableProperty(), model.getBoard()[5].disableProperty());
+        Bindings.bindBidirectional(button7.disableProperty(), model.getBoard()[6].disableProperty());
+        Bindings.bindBidirectional(button8.disableProperty(), model.getBoard()[7].disableProperty());
+        Bindings.bindBidirectional(button9.disableProperty(), model.getBoard()[8].disableProperty());
 
-        Bindings.bindBidirectional(model.getBoard()[0].textProperty(), model.textProperty());
-        Bindings.bindBidirectional(model.getBoard()[1].textProperty(), model.textProperty());
-        Bindings.bindBidirectional(model.getBoard()[2].textProperty(), model.textProperty());
-        Bindings.bindBidirectional(model.getBoard()[3].textProperty(), model.textProperty());
-        Bindings.bindBidirectional(model.getBoard()[4].textProperty(), model.textProperty());
-        Bindings.bindBidirectional(model.getBoard()[5].textProperty(), model.textProperty());
-        Bindings.bindBidirectional(model.getBoard()[6].textProperty(), model.textProperty());
-        Bindings.bindBidirectional(model.getBoard()[7].textProperty(), model.textProperty());
-        Bindings.bindBidirectional(model.getBoard()[8].textProperty(), model.textProperty());
-// Upprepa för alla knappar
+        Bindings.bindBidirectional(button1.textProperty(), model.getBoard()[0].textProperty());
+        Bindings.bindBidirectional(button2.textProperty(), model.getBoard()[1].textProperty());
+        Bindings.bindBidirectional(button3.textProperty(), model.getBoard()[2].textProperty());
+        Bindings.bindBidirectional(button4.textProperty(), model.getBoard()[3].textProperty());
+        Bindings.bindBidirectional(button5.textProperty(), model.getBoard()[4].textProperty());
+        Bindings.bindBidirectional(button6.textProperty(), model.getBoard()[5].textProperty());
+        Bindings.bindBidirectional(button7.textProperty(), model.getBoard()[6].textProperty());
+        Bindings.bindBidirectional(button8.textProperty(), model.getBoard()[7].textProperty());
+        Bindings.bindBidirectional(button9.textProperty(), model.getBoard()[8].textProperty());
+
 
         //board.forEach(this::enableButtons);
 
