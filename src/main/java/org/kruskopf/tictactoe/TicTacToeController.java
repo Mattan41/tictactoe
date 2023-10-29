@@ -1,5 +1,6 @@
 package org.kruskopf.tictactoe;
 
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -57,30 +58,66 @@ public class TicTacToeController {
     }
 
     public void initialize() {
-        board = new ArrayList<>(Arrays.asList(button1,button2,button3,button4,button5,button6,button7,button8,button9));
+        /*board = new ArrayList<>(Arrays.asList(button1,button2,button3,button4,button5,button6,button7,button8,button9));
         board.forEach(this::setButtonProperties);
         board.forEach(this::disableButtons);
+
+
+         */
         gameMode.setOnAction(event -> startGame());
 
     }
 
     public void startGame() {
+
         mode = gameMode.getValue();
 
-            if (mode.equals("Single Player")) {
-                model = new Model(true);
-                model.ifComputerTurn(this);
-            } else if (mode.equals("Multiplayer")) {
-                model = new Model(false);
+        if (mode.equals("Single Player")) {
+            model = new Model(true);
+            model.ifComputerTurn(this);
+        } else if (mode.equals("Multiplayer")) {
+            model = new Model(false);
 
-            }
+        }
 
-            board.forEach(this::enableButtons);
+        Bindings.bindBidirectional(model.getBoard()[0].disableProperty(), model.disableProperty());
+        Bindings.bindBidirectional(model.getBoard()[1].disableProperty(), model.disableProperty());
+        Bindings.bindBidirectional(model.getBoard()[2].disableProperty(), model.disableProperty());
+        Bindings.bindBidirectional(model.getBoard()[3].disableProperty(), model.disableProperty());
+        Bindings.bindBidirectional(model.getBoard()[4].disableProperty(), model.disableProperty());
+        Bindings.bindBidirectional(model.getBoard()[5].disableProperty(), model.disableProperty());
+        Bindings.bindBidirectional(model.getBoard()[6].disableProperty(), model.disableProperty());
+        Bindings.bindBidirectional(model.getBoard()[7].disableProperty(), model.disableProperty());
+        Bindings.bindBidirectional(model.getBoard()[8].disableProperty(), model.disableProperty());
+
+        Bindings.bindBidirectional(model.getBoard()[0].textProperty(), model.textProperty());
+        Bindings.bindBidirectional(model.getBoard()[1].textProperty(), model.textProperty());
+        Bindings.bindBidirectional(model.getBoard()[2].textProperty(), model.textProperty());
+        Bindings.bindBidirectional(model.getBoard()[3].textProperty(), model.textProperty());
+        Bindings.bindBidirectional(model.getBoard()[4].textProperty(), model.textProperty());
+        Bindings.bindBidirectional(model.getBoard()[5].textProperty(), model.textProperty());
+        Bindings.bindBidirectional(model.getBoard()[6].textProperty(), model.textProperty());
+        Bindings.bindBidirectional(model.getBoard()[7].textProperty(), model.textProperty());
+        Bindings.bindBidirectional(model.getBoard()[8].textProperty(), model.textProperty());
+// Upprepa för alla knappar
+
+        //board.forEach(this::enableButtons);
 
             playerScoreLabel.textProperty().bind(model.PlayerScoreProperty());
 
 
     }
+
+    // Metod som anropas när knappen trycks på
+    @FXML
+    private void onButtonClicked() {
+        // Uppdatera modellen med ett nytt tecken
+        model.updateText();
+    }
+
+
+
+
 
     public Button getButton(int row, int col) {
         for (Button button : board) {
@@ -98,7 +135,7 @@ public class TicTacToeController {
     }
 
 
-
+/*
     public void setButtonProperties(Button button) {
         button.setOnAction(event -> setSymbolAndDisable(button));
         button.setFocusTraversable(false);
@@ -109,6 +146,8 @@ public class TicTacToeController {
         button.setDisable(true);
         model.checkGameOver(this);
     }
+
+ */
 
     @FXML
     private void restartGame(ActionEvent event) {
