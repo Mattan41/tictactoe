@@ -96,7 +96,7 @@ public class TicTacToeController {
         Bindings.bindBidirectional(button9.textProperty(), model.getBoard()[8].textProperty());
 
             playerScoreLabel.textProperty().bind(model.PlayerScoreProperty());
-
+            winner.textProperty().bind(model.winnerProperty());
 
     }
 

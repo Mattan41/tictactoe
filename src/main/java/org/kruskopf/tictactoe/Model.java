@@ -14,17 +14,18 @@ public class Model {
     public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
     int player1Score = 0;
     int player2Score = 0;
+
+    private StringProperty winner = new SimpleStringProperty("tic-tac-toe");
+
     private StringProperty playerScore = new SimpleStringProperty("Player 1: " + player1Score + " wins\nPlayer 2: " + player2Score + " wins");
+
     private boolean singlePlayer;
     private int boardcount;
     private Random random;
 
-
-
-
     private final BooleanProperty disable = new SimpleBooleanProperty(false);
-    private final StringProperty text = new SimpleStringProperty("");
 
+    private final StringProperty text = new SimpleStringProperty("");
     Button[] board;
 
     public Button[] getBoard() {
@@ -42,6 +43,13 @@ public class Model {
 
     public StringProperty textProperty() {
         return text;
+    }
+
+    public String getWinner() {
+        return winner.get();
+    }
+    public void setWinner(String winner) {
+        this.winner.set(winner);
     }
 
     public Model(boolean singlePlayer) {
@@ -65,7 +73,7 @@ public class Model {
             board[index].setDisable(true);
             playerTurn = PlayerTurn.PLAYER1;
         }
-        //checkGameOver();
+        checkGameOver();
     }
 
 
@@ -123,6 +131,11 @@ public class Model {
         return playerScore;
     }
 
+
+    public StringProperty winnerProperty() {
+        return winner;
+    }
+
     public void setPlayerScore(String playerScore) {
         this.playerScore.set(playerScore);
     }
@@ -143,53 +156,53 @@ public class Model {
     }
 
 
-    /*
-    void checkGameOver(TicTacToeController ticTacToeController) {
+
+    void checkGameOver() {
         if (boardcount==9){
-            ticTacToeController.winner.setText("It's a draw!");
-            matchOver(ticTacToeController);
+            winner.set("It's a draw!");
+            matchOver();
         }
         else
             for (int i = 0; i < 8; i++) {
 
                 String line = switch (i){
-                    case 0 -> ticTacToeController.button1.getText()+ ticTacToeController.button2.getText()+ ticTacToeController.button3.getText();
-                    case 1 -> ticTacToeController.button4.getText()+ ticTacToeController.button5.getText()+ ticTacToeController.button6.getText();
-                    case 2 -> ticTacToeController.button7.getText()+ ticTacToeController.button8.getText()+ ticTacToeController.button9.getText();
-                    case 3 -> ticTacToeController.button1.getText()+ ticTacToeController.button4.getText()+ ticTacToeController.button7.getText();
-                    case 4 -> ticTacToeController.button2.getText()+ ticTacToeController.button5.getText()+ ticTacToeController.button8.getText();
-                    case 5 -> ticTacToeController.button3.getText()+ ticTacToeController.button6.getText()+ ticTacToeController.button9.getText();
-                    case 6 -> ticTacToeController.button1.getText()+ ticTacToeController.button5.getText()+ ticTacToeController.button9.getText();
-                    case 7 -> ticTacToeController.button3.getText()+ ticTacToeController.button5.getText()+ ticTacToeController.button7.getText();
+                    case 0 -> board[0].getText() + board[1].getText()+ board[2].getText();
+                    case 1 -> board[3].getText() + board[4].getText()+ board[5].getText();
+                    case 2 -> board[6].getText() + board[7].getText()+ board[8].getText();
+                    case 3 -> board[0].getText() + board[3].getText()+ board[6].getText();
+                    case 4 -> board[1].getText() + board[4].getText()+ board[7].getText();
+                    case 5 -> board[2].getText() + board[5].getText()+ board[8].getText();
+                    case 6 -> board[0].getText() + board[4].getText()+ board[8].getText();
+                    case 7 -> board[2].getText() + board[4].getText()+ board[6].getText();
                     default -> null;
                 };
                 if (line.equals("XXX")) {
-                    ticTacToeController.winner.setText("Player 1 won!");
+                    winner.set("Player 1 won!");
                     player1Score++;
-                    matchOver(ticTacToeController);
+                    matchOver();
                     break;
                 }
                 else if(line.equals("OOO")) {
-                    ticTacToeController.winner.setText("Player 2 won!");
+                    winner.set("Player 2 won!");
                     player2Score++;
-                    matchOver(ticTacToeController);
+                    matchOver();
                     break;
 
                 }
             }
     }
 
-     */
 
-    /*
-    public void matchOver(TicTacToeController ticTacToeController) {
-        ticTacToeController.board.forEach(ticTacToeController::disableButtons);
-        ticTacToeController.newMatch.setDisable(false);
+
+
+    public void matchOver() {
+        //board.forEach(this::disableButtons);
+        //newMatch.setDisable(false);
         playerTurn = PlayerTurn.PLAYER1;
         setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
         boardcount=0;
     }
- */
+
 
 
 
