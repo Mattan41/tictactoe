@@ -9,10 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class TicTacToeController {
 
@@ -98,20 +95,28 @@ public class TicTacToeController {
         Bindings.bindBidirectional(button8.textProperty(), model.getBoard()[7].textProperty());
         Bindings.bindBidirectional(button9.textProperty(), model.getBoard()[8].textProperty());
 
-
-        //board.forEach(this::enableButtons);
-
             playerScoreLabel.textProperty().bind(model.PlayerScoreProperty());
 
 
     }
 
-    // Metod som anropas när knappen trycks på
-    @FXML
-    private void onButtonClicked() {
-        // Uppdatera modellen med ett nytt tecken
-        model.updateText();
+
+
+
+    public void onButtonClicked(ActionEvent actionEvent) {
+
+        Button button = (Button) actionEvent.getSource();
+        int row = GridPane.getRowIndex(button);
+        int col = GridPane.getColumnIndex(button);
+        int index = (row * 3) + col;
+
+        //int index = Arrays.asList(model.getBoard()).indexOf(button);
+            //denna funkar inte...
+        model.setSymbolAndDisable(index);
+
+
     }
+
 
 
 
@@ -134,17 +139,6 @@ public class TicTacToeController {
 
 
 /*
-    public void setButtonProperties(Button button) {
-        button.setOnAction(event -> setSymbolAndDisable(button));
-        button.setFocusTraversable(false);
-    }
-
-    public void setSymbolAndDisable(Button button) {
-        model.setSymbol(button);
-        button.setDisable(true);
-        model.checkGameOver(this);
-    }
-
  */
 
     @FXML
@@ -152,8 +146,10 @@ public class TicTacToeController {
         board.forEach(model::resetButton);
         winner.setText("Tic-Tac-Toe");
         newMatch.setDisable(true);
+
     }
 
+    /*
     public void disableButtons (Button button){
         button.setDisable(true);
     }
@@ -165,6 +161,8 @@ public class TicTacToeController {
         return this.mode;
     }
 
+
+     */
     //TODO: REFACTOR, move metods to Model, add properties, reference buttons to array in Model. class board?
 
     //ToDo: computer controls player 2 in singlePlayerMode

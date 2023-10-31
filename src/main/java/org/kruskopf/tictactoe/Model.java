@@ -4,11 +4,9 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Window;
-import java.util.ArrayList;
+
 import java.util.Random;
 
 public class Model {
@@ -27,7 +25,7 @@ public class Model {
     private final BooleanProperty disable = new SimpleBooleanProperty(false);
     private final StringProperty text = new SimpleStringProperty("");
 
-    Button[] board = new Button[9];
+    Button[] board;
 
     public Button[] getBoard() {
         return board;
@@ -46,15 +44,6 @@ public class Model {
         return text;
     }
 
-    public void updateText() {
-        if (text.get().isEmpty() && playerTurn == PlayerTurn.PLAYER2) {
-            text.set("O");
-        } else {
-            text.set("X");
-        }
-    }
-
-
     public Model(boolean singlePlayer) {
         this.singlePlayer = singlePlayer;
         board = new Button[9];
@@ -65,6 +54,21 @@ public class Model {
         }
         random = new Random();
     }
+
+    public void setSymbolAndDisable(int index) {
+        if (playerTurn == PlayerTurn.PLAYER1) {
+            board[index].setText("X");
+            board[index].setDisable(true);
+            playerTurn = PlayerTurn.PLAYER2;
+        } else {
+            board[index].setText("O");
+            board[index].setDisable(true);
+            playerTurn = PlayerTurn.PLAYER1;
+        }
+        //checkGameOver();
+    }
+
+
 
     public void makeMove(int row, int col, String player) {
         Button button = getButton(row, col);
@@ -138,6 +142,8 @@ public class Model {
         }
     }
 
+
+    /*
     void checkGameOver(TicTacToeController ticTacToeController) {
         if (boardcount==9){
             ticTacToeController.winner.setText("It's a draw!");
@@ -173,6 +179,9 @@ public class Model {
             }
     }
 
+     */
+
+    /*
     public void matchOver(TicTacToeController ticTacToeController) {
         ticTacToeController.board.forEach(ticTacToeController::disableButtons);
         ticTacToeController.newMatch.setDisable(false);
@@ -180,6 +189,7 @@ public class Model {
         setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
         boardcount=0;
     }
+ */
 
 
 
