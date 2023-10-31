@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.util.List;
@@ -55,6 +56,19 @@ public class TicTacToeController {
     }
 
     public void initialize() {
+        String buttonStyle = "-fx-font-size: 40px; -fx-font-weight: bold;";
+
+        button1.setStyle(buttonStyle);
+        button2.setStyle(buttonStyle);
+        button3.setStyle(buttonStyle);
+        button4.setStyle(buttonStyle);
+        button5.setStyle(buttonStyle);
+        button6.setStyle(buttonStyle);
+        button7.setStyle(buttonStyle);
+        button8.setStyle(buttonStyle);
+        button9.setStyle(buttonStyle);
+
+
         gameMode.setOnAction(event -> startGame());
     }
 

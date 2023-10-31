@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
 import java.util.Arrays;
@@ -66,11 +65,13 @@ public class Model {
     public void setSymbolAndDisable(int index) {
         if (playerTurn == PlayerTurn.PLAYER1) {
             board[index].setText("X");
+            board[index].setStyle("-fx-text-fill: blue;");
             board[index].setDisable(true);
             playerTurn = PlayerTurn.PLAYER2;
         } else {
             board[index].setText("O");
             board[index].setDisable(true);
+            board[index].setStyle("-fx-text-fill: red;");
             playerTurn = PlayerTurn.PLAYER1;
         }
         boardcount++;
@@ -178,9 +179,35 @@ public class Model {
                     Duration.millis(500 + (Math.random() * 1000)),
                     ae -> setSymbolAndDisable(index)));
             timeline.play();
+            //TODO: disable scene while waiting
         }
     }
 
+   /* public void ifComputerTurn() {
+        if (isComputerTurn()) {
+
+            int randomIndex;
+            int index;
+
+            do {
+                randomIndex = random.nextInt(9);
+            } while (!board[randomIndex].getText().isEmpty());
+
+            index = randomIndex;
+
+            try {
+                Thread.sleep((long) (500 + (Math.random() * 1000))); // Vänta i 0.5-1.5 sekunder
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            setSymbolAndDisable(index);
+
+        }
+    }
+
+
+    */
 
     public enum PlayerTurn {
         PLAYER1, PLAYER2
@@ -189,7 +216,6 @@ public class Model {
 }
 
 
-// Todo: Draw replace boardCount with method to check anyEmpty
-//ToDo: computer controls player 2 in singlePlayerMode
+//Todo: Draw replace boardCount with method to check anyEmpty
 //toDo: add tests
 //TODo: MultiPlayer
