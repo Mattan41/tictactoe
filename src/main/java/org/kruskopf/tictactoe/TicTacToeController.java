@@ -62,13 +62,14 @@ public class TicTacToeController {
 
         mode = gameMode.getValue();
 
-        if (mode.equals("Single Player")) {
+        if (mode.equals("SinglePlayer")) {
             model = new Model(true);
             model.isComputerTurn();
         } else if (mode.equals("Multiplayer")) {
             model = new Model(false);
 
         }
+
 
         Bindings.bindBidirectional(button1.disableProperty(), model.getBoard()[0].disableProperty());
         Bindings.bindBidirectional(button2.disableProperty(), model.getBoard()[1].disableProperty());
@@ -96,9 +97,6 @@ public class TicTacToeController {
 
     }
 
-
-
-
     public void onButtonClicked(ActionEvent actionEvent) {
 
         Button button = (Button) actionEvent.getSource();
@@ -112,45 +110,9 @@ public class TicTacToeController {
 
 
     }
-
-    public Button getButton(int row, int col) {
-        for (Button button : board) {
-            if (GridPane.getRowIndex(button) == row && GridPane.getColumnIndex(button) == col) {
-                return button;
-            }
-        }
-        return null;
-    }
-
-    private boolean isEmpty(int row, int col) {
-        Button button = getButton(row, col);
-        return button.getText().isEmpty();
-    }
-
-
     public void restartGame(ActionEvent event) {
         model.resetBoard();
         newMatch.setDisable(true);
     }
-
-    /*
-    public void disableButtons (Button button){
-        button.setDisable(true);
-    }
-    public void enableButtons(Button button){
-        button.setDisable(false);
-    }
-
-    public String getMode() {
-        return this.mode;
-    }
-     */
-    //TODO: REFACTOR, move metods to Model, add properties, reference buttons to array in Model. class board?
-    // replace boardCount with
-    //ToDo: computer controls player 2 in singlePlayerMode
-    //ToDO: draw
-    //toDo: add tests
-    //TODo: MultiPlayer
-
 
 }

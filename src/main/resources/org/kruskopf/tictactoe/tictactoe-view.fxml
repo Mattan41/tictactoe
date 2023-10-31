@@ -29,7 +29,7 @@
          <ChoiceBox fx:id="gameMode" layoutX="169.0" layoutY="62.0" prefWidth="150.0">
          <items>
             <FXCollections fx:factory="observableArrayList">
-               <String fx:value="Single Player" />
+               <String fx:value="SinglePlayer" />
                <String fx:value="Multiplayer" />
             </FXCollections>
          </items>

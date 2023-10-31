@@ -15,9 +15,7 @@ public class Model {
     public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
     int player1Score = 0;
     int player2Score = 0;
-
     private StringProperty winner = new SimpleStringProperty("tic-tac-toe");
-
     private StringProperty playerScore = new SimpleStringProperty("Player 1: " + player1Score + " wins\nPlayer 2: " + player2Score + " wins");
     private BooleanProperty newMatch = new SimpleBooleanProperty(true);
     private boolean singlePlayer;
@@ -32,6 +30,7 @@ public class Model {
         return board;
     }
 
+
     public void setBoard(Button[] board) {
         this.board = board;
     }
@@ -41,12 +40,13 @@ public class Model {
     public StringProperty textProperty() {
         return text;
     }
-        public String getWinner() {
+    public String getWinner() {
         return winner.get();
     }
     public void setWinner(String winner) {
         this.winner.set(winner);
     }
+
 
     public Model(boolean singlePlayer) {
         this.singlePlayer = singlePlayer;
@@ -75,53 +75,6 @@ public class Model {
     }
 
 
-    public void makeMove(int row, int col, String player) {
-        Button button = getButton(row, col);
-        button.setText(player);
-    }
-
-    public int[] getNextMove() {
-        int[] move = new int[2];
-        do {
-            move[0] = random.nextInt(3);
-            move[1] = random.nextInt(3);
-        } while (!isEmpty(move[0], move[1]));
-        return move;
-    }
-
-    public boolean isGameOver() {
-        return Arrays.stream(board).anyMatch(button -> !button.isDisabled());
-        //ToDo: Draw -  kolla om inget index har tomt  är tom text draw.
-    }
-
-
-    private boolean isEmpty(int row, int col) {
-        Button button = getButton(row, col);
-        assert button != null;
-        return button.getText().isEmpty();
-    }
-
-    private Button getButton(int row, int col) {
-        for (Button button : board) {
-            if (GridPane.getRowIndex(button) == row && GridPane.getColumnIndex(button) == col) {
-                return button;
-            }
-        }
-        return null;
-    }
-
-    public String getCurrentPlayer() {
-
-        if (playerTurn == PlayerTurn.PLAYER1){
-            return "X";
-        }
-        else return "O";
-    }
-
-    public String getPlayerScore() {
-        return playerScore.get();
-    }
-
     public StringProperty PlayerScoreProperty() {
         return playerScore;
     }
@@ -129,31 +82,13 @@ public class Model {
     public BooleanProperty newMatchProperty(){
         return newMatch;
     }
+
     public StringProperty winnerProperty() {
         return winner;
     }
-
     public void setPlayerScore(String playerScore) {
         this.playerScore.set(playerScore);
     }
-
-
-
-    void setSymbol(Button button) {
-        if (playerTurn == PlayerTurn.PLAYER1) {
-            button.setText("X");
-            boardcount++;
-            playerTurn = PlayerTurn.PLAYER2;
-        }
-        else {
-            button.setText("O");
-            boardcount++;
-            playerTurn = PlayerTurn.PLAYER1;
-        }
-    }
-
-
-
     void checkGameOver() {
 
         if (boardcount==9){
@@ -190,6 +125,10 @@ public class Model {
             }
     }
 
+    public boolean isGameOver() {
+        return Arrays.stream(board).anyMatch(button -> !button.isDisabled());
+        //ToDo: Draw -  kolla om inget index har tomt  är tom text draw.
+    }
 
     public void matchOver() {
         for (Button button : board) {
@@ -201,7 +140,7 @@ public class Model {
         newMatch.set(false);
     }
 
-    void resetBoard() {
+   public void resetBoard() {
         for (Button button : board) {
             button.setDisable(false);
             button.setText("");
@@ -212,14 +151,42 @@ public class Model {
 
 
 
-    void resetButton(Button button) {
-        button.setDisable(false);
-        button.setText("");
-    }
+
+    //dator nedan
 
     public boolean isComputerTurn() {
-        return singlePlayer && getCurrentPlayer().equals("O");
+        return singlePlayer && playerTurn == PlayerTurn.PLAYER2;
     }
+
+
+    private Button getButton(int row, int col) {
+        for (Button button : board) {
+            if (GridPane.getRowIndex(button) == row && GridPane.getColumnIndex(button) == col) {
+                return button;
+            }
+        }
+        return null;
+    }
+    public void makeMove(int row, int col, String player) {
+        Button button = getButton(row, col);
+        button.setText(player);
+    }
+
+    public int[] getNextMove() {
+        int[] move = new int[2];
+        do {
+            move[0] = random.nextInt(3);
+            move[1] = random.nextInt(3);
+        } while (!isEmpty(move[0], move[1]));
+        return move;
+    }
+
+    private boolean isEmpty(int row, int col) {
+        Button button = getButton(row, col);
+        assert button != null;
+        return button.getText().isEmpty();
+    }
+
 
     void ifComputerTurn() {
         if (isComputerTurn()) {
@@ -251,11 +218,15 @@ public class Model {
             matchOver(ticTacToeController);
         }
     }
-
-
      */
     public enum PlayerTurn {
         PLAYER1, PLAYER2
     }
 
 }
+
+
+// Todo: Draw replace boardCount with method to check anyEmpty
+//ToDo: computer controls player 2 in singlePlayerMode
+//toDo: add tests
+//TODo: MultiPlayer
