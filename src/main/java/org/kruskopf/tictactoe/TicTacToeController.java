@@ -64,8 +64,8 @@ public class TicTacToeController {
 
         if (mode.equals("SinglePlayer")) {
             model = new Model(true);
-            model.isComputerTurn();
-        } else if (mode.equals("Multiplayer")) {
+            model.ifComputerTurn();
+        } else if (mode.equals("MultiPlayer")) {
             model = new Model(false);
 
         }

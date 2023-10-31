@@ -18,13 +18,13 @@ public class Model {
     private StringProperty winner = new SimpleStringProperty("tic-tac-toe");
     private StringProperty playerScore = new SimpleStringProperty("Player 1: " + player1Score + " wins\nPlayer 2: " + player2Score + " wins");
     private BooleanProperty newMatch = new SimpleBooleanProperty(true);
+    private Random random;
     private boolean singlePlayer;
     private int boardcount;
 
     Button[] board;
     private final BooleanProperty disable = new SimpleBooleanProperty(false);
     private final StringProperty text = new SimpleStringProperty("");
-    private Random random;
 
     public Button[] getBoard() {
         return board;
@@ -72,6 +72,7 @@ public class Model {
         }
         boardcount++;
         checkGameOver();
+        ifComputerTurn();
     }
 
 
@@ -155,70 +156,26 @@ public class Model {
     //dator nedan
 
     public boolean isComputerTurn() {
-        return singlePlayer && playerTurn == PlayerTurn.PLAYER2;
+       return singlePlayer && playerTurn == PlayerTurn.PLAYER2;
     }
 
-
-    private Button getButton(int row, int col) {
-        for (Button button : board) {
-            if (GridPane.getRowIndex(button) == row && GridPane.getColumnIndex(button) == col) {
-                return button;
-            }
-        }
-        return null;
-    }
-    public void makeMove(int row, int col, String player) {
-        Button button = getButton(row, col);
-        button.setText(player);
-    }
-
-    public int[] getNextMove() {
-        int[] move = new int[2];
-        do {
-            move[0] = random.nextInt(3);
-            move[1] = random.nextInt(3);
-        } while (!isEmpty(move[0], move[1]));
-        return move;
-    }
-
-    private boolean isEmpty(int row, int col) {
-        Button button = getButton(row, col);
-        assert button != null;
-        return button.getText().isEmpty();
-    }
-
-
-    void ifComputerTurn() {
+    public void ifComputerTurn() {
         if (isComputerTurn()) {
-            int[] move = getNextMove();
-            int row = move[0];
-            int col = move[1];
-            Button button = getButton(row, col);
-            button.setText("O");
-            makeMove(row, col, "O");
-            playerTurn = PlayerTurn.PLAYER1;
+
+            int randomIndex;
+            int index;
+
+            do {
+                randomIndex = random.nextInt(9);
+            } while (!board[randomIndex].getText().isEmpty());
+
+            index = randomIndex;
+            setSymbolAndDisable(index);
+
         }
     }
 
-    /*
-    public void computerMove(TicTacToeController ticTacToeController) {
-        if (isComputerTurn()) {
-            Random rand = new Random();
-            int index = rand.nextInt(9);
-            Button button = board.get(index);
-            while (button.isDisabled()) {
-                index = rand.nextInt(9);
-                button = board.get(index);
-            }
-            ticTacToeController.setSymbolAndDisable(button);
 
-            if (!isGameOver()) {
-                playerTurn = PlayerTurn.PLAYER1;
-            }
-            matchOver(ticTacToeController);
-        }
-    }
-     */
     public enum PlayerTurn {
         PLAYER1, PLAYER2
     }
