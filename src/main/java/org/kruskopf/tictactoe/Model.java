@@ -1,11 +1,14 @@
 package org.kruskopf.tictactoe;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -170,8 +173,11 @@ public class Model {
             } while (!board[randomIndex].getText().isEmpty());
 
             index = randomIndex;
-            setSymbolAndDisable(index);
 
+            Timeline timeline = new Timeline(new KeyFrame(
+                    Duration.millis(500 + (Math.random() * 1000)),
+                    ae -> setSymbolAndDisable(index)));
+            timeline.play();
         }
     }
 
