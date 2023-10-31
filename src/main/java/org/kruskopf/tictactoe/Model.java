@@ -19,15 +19,14 @@ public class Model {
     private StringProperty winner = new SimpleStringProperty("tic-tac-toe");
 
     private StringProperty playerScore = new SimpleStringProperty("Player 1: " + player1Score + " wins\nPlayer 2: " + player2Score + " wins");
-
+    private BooleanProperty newMatch = new SimpleBooleanProperty(true);
     private boolean singlePlayer;
     private int boardcount;
-    private Random random;
 
-    private final BooleanProperty disable = new SimpleBooleanProperty(false);
-
-    private final StringProperty text = new SimpleStringProperty("");
     Button[] board;
+    private final BooleanProperty disable = new SimpleBooleanProperty(false);
+    private final StringProperty text = new SimpleStringProperty("");
+    private Random random;
 
     public Button[] getBoard() {
         return board;
@@ -36,17 +35,13 @@ public class Model {
     public void setBoard(Button[] board) {
         this.board = board;
     }
-
-
     public BooleanProperty disableProperty() {
         return disable;
     }
-
     public StringProperty textProperty() {
         return text;
     }
-
-    public String getWinner() {
+        public String getWinner() {
         return winner.get();
     }
     public void setWinner(String winner) {
@@ -61,6 +56,7 @@ public class Model {
             board[i].setDisable(false);
             board[i].setText("");
         }
+        newMatch = newMatchProperty();
         random = new Random();
     }
 
@@ -79,7 +75,6 @@ public class Model {
     }
 
 
-
     public void makeMove(int row, int col, String player) {
         Button button = getButton(row, col);
         button.setText(player);
@@ -93,7 +88,6 @@ public class Model {
         } while (!isEmpty(move[0], move[1]));
         return move;
     }
-
 
     public boolean isGameOver() {
         return Arrays.stream(board).anyMatch(button -> !button.isDisabled());
@@ -132,7 +126,9 @@ public class Model {
         return playerScore;
     }
 
-
+    public BooleanProperty newMatchProperty(){
+        return newMatch;
+    }
     public StringProperty winnerProperty() {
         return winner;
     }
@@ -195,16 +191,22 @@ public class Model {
     }
 
 
-
-
     public void matchOver() {
         for (Button button : board) {
             button.setDisable(true);
         }
-
         playerTurn = PlayerTurn.PLAYER1;
         setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
         boardcount=0;
+        newMatch.set(false);
+    }
+
+    void resetBoard() {
+        for (Button button : board) {
+            button.setDisable(false);
+            button.setText("");
+        }
+        winner.set("Tic-Tac-Toe");
     }
 
 

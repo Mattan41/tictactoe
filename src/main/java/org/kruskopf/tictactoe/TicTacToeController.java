@@ -55,12 +55,7 @@ public class TicTacToeController {
     }
 
     public void initialize() {
-        /*board = new ArrayList<>(Arrays.asList(button1,button2,button3,button4,button5,button6,button7,button8,button9));
-        board.forEach(this::setButtonProperties);
-        board.forEach(this::disableButtons);
-         */
         gameMode.setOnAction(event -> startGame());
-
     }
 
     public void startGame() {
@@ -95,8 +90,9 @@ public class TicTacToeController {
         Bindings.bindBidirectional(button8.textProperty(), model.getBoard()[7].textProperty());
         Bindings.bindBidirectional(button9.textProperty(), model.getBoard()[8].textProperty());
 
-            playerScoreLabel.textProperty().bind(model.PlayerScoreProperty());
-            winner.textProperty().bind(model.winnerProperty());
+        playerScoreLabel.textProperty().bind(model.PlayerScoreProperty());
+        winner.textProperty().bind(model.winnerProperty());
+        Bindings.bindBidirectional(newMatch.disableProperty(), model.newMatchProperty());
 
     }
 
@@ -117,11 +113,6 @@ public class TicTacToeController {
 
     }
 
-
-
-
-
-
     public Button getButton(int row, int col) {
         for (Button button : board) {
             if (GridPane.getRowIndex(button) == row && GridPane.getColumnIndex(button) == col) {
@@ -131,22 +122,15 @@ public class TicTacToeController {
         return null;
     }
 
-
     private boolean isEmpty(int row, int col) {
         Button button = getButton(row, col);
         return button.getText().isEmpty();
     }
 
 
-/*
- */
-
-    @FXML
-    private void restartGame(ActionEvent event) {
-        board.forEach(model::resetButton);
-        winner.setText("Tic-Tac-Toe");
+    public void restartGame(ActionEvent event) {
+        model.resetBoard();
         newMatch.setDisable(true);
-
     }
 
     /*
@@ -160,8 +144,6 @@ public class TicTacToeController {
     public String getMode() {
         return this.mode;
     }
-
-
      */
     //TODO: REFACTOR, move metods to Model, add properties, reference buttons to array in Model. class board?
     // replace boardCount with
