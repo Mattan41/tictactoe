@@ -69,7 +69,7 @@ public class TicTacToeController {
 
         if (mode.equals("Single Player")) {
             model = new Model(true);
-            model.ifComputerTurn(this);
+            model.isComputerTurn();
         } else if (mode.equals("Multiplayer")) {
             model = new Model(false);
 
@@ -164,7 +164,7 @@ public class TicTacToeController {
 
      */
     //TODO: REFACTOR, move metods to Model, add properties, reference buttons to array in Model. class board?
-
+    // replace boardCount with
     //ToDo: computer controls player 2 in singlePlayerMode
     //ToDO: draw
     //toDo: add tests

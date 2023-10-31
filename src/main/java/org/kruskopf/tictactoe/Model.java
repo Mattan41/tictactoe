@@ -7,6 +7,7 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Model {
@@ -73,6 +74,7 @@ public class Model {
             board[index].setDisable(true);
             playerTurn = PlayerTurn.PLAYER1;
         }
+        boardcount++;
         checkGameOver();
     }
 
@@ -92,14 +94,13 @@ public class Model {
         return move;
     }
 
-/*
+
     public boolean isGameOver() {
-        return board.stream().anyMatch(button -> !button.isDisabled());
-        //ToDo: Draw -  denna verkar inte fungera. med allMatch så blir det draw på första klicket.
+        return Arrays.stream(board).anyMatch(button -> !button.isDisabled());
+        //ToDo: Draw -  kolla om inget index har tomt  är tom text draw.
     }
 
 
- */
     private boolean isEmpty(int row, int col) {
         Button button = getButton(row, col);
         assert button != null;
@@ -158,6 +159,7 @@ public class Model {
 
 
     void checkGameOver() {
+
         if (boardcount==9){
             winner.set("It's a draw!");
             matchOver();
@@ -196,8 +198,10 @@ public class Model {
 
 
     public void matchOver() {
-        //board.forEach(this::disableButtons);
-        //newMatch.setDisable(false);
+        for (Button button : board) {
+            button.setDisable(true);
+        }
+
         playerTurn = PlayerTurn.PLAYER1;
         setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
         boardcount=0;
@@ -215,12 +219,12 @@ public class Model {
         return singlePlayer && getCurrentPlayer().equals("O");
     }
 
-    void ifComputerTurn(TicTacToeController ticTacToeController) {
+    void ifComputerTurn() {
         if (isComputerTurn()) {
             int[] move = getNextMove();
             int row = move[0];
             int col = move[1];
-            Button button = ticTacToeController.getButton(row, col);
+            Button button = getButton(row, col);
             button.setText("O");
             makeMove(row, col, "O");
             playerTurn = PlayerTurn.PLAYER1;
