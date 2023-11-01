@@ -44,6 +44,8 @@ public class TicTacToeController {
     public Button startRound;
     private Model model;
 
+    @FXML
+    private Button endGame;
     private String mode;
 
 
@@ -93,17 +95,20 @@ public class TicTacToeController {
         playerScoreLabel.textProperty().bind(model.PlayerScoreProperty());
         winner.textProperty().bind(model.winnerProperty());
         Bindings.bindBidirectional(startRound.disableProperty(), model.restartRoundProperty());
+        Bindings.bindBidirectional(endGame.disableProperty(), model.endGameProperty());
+        Bindings.bindBidirectional(gameMode.disableProperty(), model.gameModeProperty());
         gameMode.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setGameMode(newValue));
 
     }
 
     private void setGameMode(String newValue) {
         if (newValue != null && newValue.equals("SinglePlayer")) {
-            model.setPlayerMode(true);
+            model.setSinglePlayerMode(true);
             model.ifComputerTurn();
             startRound.setDisable(false);
         } else if (newValue != null && newValue.equals("MultiPlayer")) {
             startRound.setDisable(false);
+            model.setSinglePlayerMode(false);
         }
     }
 
@@ -124,6 +129,10 @@ public class TicTacToeController {
     public void restartRound(ActionEvent event) {
         model.resetBoard();
         startRound.setDisable(true);
+        gameMode.setDisable(true);
     }
 
+    public void endGame(ActionEvent actionEvent) {
+        model.endGameAndDeclareWinner();
+    }
 }

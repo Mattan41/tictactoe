@@ -2,10 +2,7 @@ package org.kruskopf.tictactoe;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.util.Duration;
 
 import java.util.Random;
@@ -17,8 +14,9 @@ public class Model {
     int player2Score = 0;
     private StringProperty winner = new SimpleStringProperty("tic-tac-toe");
     private StringProperty playerScore = new SimpleStringProperty("Player 1: " + player1Score + " wins\nPlayer 2: " + player2Score + " wins");
-    private BooleanProperty newMatch = new SimpleBooleanProperty(true);
-
+    private BooleanProperty restartRound = new SimpleBooleanProperty(true);
+    private BooleanProperty endGame = new SimpleBooleanProperty(false);
+    private BooleanProperty gameMode = new SimpleBooleanProperty(false);
     private Random random;
     private boolean singlePlayer;
     private int boardcount;
@@ -47,7 +45,7 @@ public class Model {
         this.winner.set(winner);
     }
 
-    public void setPlayerMode(boolean singlePlayer) {
+    public void setSinglePlayerMode(boolean singlePlayer) {
         this.singlePlayer = singlePlayer;
     }
 
@@ -57,7 +55,7 @@ public class Model {
         for (int i = 0; i < board.length; i++) {
             board[i] = new SimpleStringProperty(" ");
         }
-        newMatch = restartRoundProperty();
+        restartRound = restartRoundProperty();
         random = new Random();
     }
 
@@ -80,13 +78,19 @@ public class Model {
         return playerScore;
     }
 
-    public BooleanProperty restartRoundProperty(){
-        return newMatch;
+    public BooleanProperty endGameProperty() {
+        return endGame;
     }
-
+    public BooleanProperty gameModeProperty() {
+        return gameMode;
+    }
+    public BooleanProperty restartRoundProperty(){
+        return restartRound;
+    }
     public StringProperty winnerProperty() {
         return winner;
     }
+
     public void setPlayerScore(String playerScore) {
         this.playerScore.set(playerScore);
     }
@@ -125,10 +129,11 @@ public class Model {
                 }
             }
     }
-
     //public boolean isGameOver() {
-        //return Arrays.stream(board).anyMatch(button -> !button.isDisabled());
-        //ToDo: Draw -  kolla om inget index har tomt är tom text draw.
+    //return Arrays.stream(board).anyMatch(button -> !button.isDisabled());
+
+    //ToDo: Draw -  kolla om inget index har tomt är tom text draw.
+
     //}
 
     public void matchOver() {
@@ -139,7 +144,7 @@ public class Model {
         playerTurn = PlayerTurn.PLAYER1;
         setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
         boardcount=0;
-        newMatch.set(false);
+        restartRound.set(false);
 
     }
 
@@ -180,10 +185,19 @@ public class Model {
         }
     }
 
+    public void endGameAndDeclareWinner() {
+        if (player1Score>player2Score)
+            winner.set("Player1 won the Shablam!");
+        else if (player1Score<player2Score)
+            winner.set("Player2 won the Shablam!");
+        else if (player1Score==player2Score)
+            winner.set("It is a tie!");
+
+        gameMode.set(false);
+    }
 }
 
 
 //Todo: Draw replace boardCount with method to check anyEmpty
 //toDo: add tests
 //TODo: MultiPlayer, Network klient?
-//Todo:
