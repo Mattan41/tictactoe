@@ -27,10 +27,11 @@ class ModelTest {
 
 
         //Act
+        Boolean button7 = model.board[6].get().isEmpty();
         Boolean button9 = model.board[8].get().isEmpty();
-        Boolean button8 = model.board[7].get().isEmpty();
         //Assert
-        assertThat(button8 && button9).isTrue();
+        assertThat(button9).isTrue();
+        assertThat(button7).isFalse();
     }
 
     @Test
