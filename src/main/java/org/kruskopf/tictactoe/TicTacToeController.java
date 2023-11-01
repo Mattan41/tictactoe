@@ -7,11 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class TicTacToeController {
 
@@ -44,8 +40,8 @@ public class TicTacToeController {
     public Button button8;
     @FXML
     public Button button9;
-    List<Button> board;
-    public Button newMatch;
+
+    public Button startRound;
     private Model model;
 
     private String mode;
@@ -57,6 +53,9 @@ public class TicTacToeController {
     }
 
     public void initialize() {
+        model = new Model();
+
+
         String buttonStyle = "-fx-font-size: 40px; -fx-font-weight: bold;";
 
         button1.setStyle(buttonStyle);
@@ -70,47 +69,44 @@ public class TicTacToeController {
         button9.setStyle(buttonStyle);
 
 
-        gameMode.setOnAction(event -> startGame());
-    }
 
-    public void startGame() {
+        button1.disableProperty().bind(Bindings.isNotEmpty(model.getBoard()[0]));
+        button2.disableProperty().bind(Bindings.isNotEmpty(model.getBoard()[1]));
+        button3.disableProperty().bind(Bindings.isNotEmpty(model.getBoard()[2]));
+        button4.disableProperty().bind(Bindings.isNotEmpty(model.getBoard()[3]));
+        button5.disableProperty().bind(Bindings.isNotEmpty(model.getBoard()[4]));
+        button6.disableProperty().bind(Bindings.isNotEmpty(model.getBoard()[5]));
+        button7.disableProperty().bind(Bindings.isNotEmpty(model.getBoard()[6]));
+        button8.disableProperty().bind(Bindings.isNotEmpty(model.getBoard()[7]));
+        button9.disableProperty().bind(Bindings.isNotEmpty(model.getBoard()[8]));
 
-        mode = gameMode.getValue();
-
-        if (mode.equals("SinglePlayer")) {
-            model = new Model(true);
-            model.ifComputerTurn();
-        } else if (mode.equals("MultiPlayer")) {
-            model = new Model(false);
-
-        }
-
-
-        Bindings.bindBidirectional(button1.disableProperty(), model.getBoard()[0].disableProperty());
-        Bindings.bindBidirectional(button2.disableProperty(), model.getBoard()[1].disableProperty());
-        Bindings.bindBidirectional(button3.disableProperty(), model.getBoard()[2].disableProperty());
-        Bindings.bindBidirectional(button4.disableProperty(), model.getBoard()[3].disableProperty());
-        Bindings.bindBidirectional(button5.disableProperty(), model.getBoard()[4].disableProperty());
-        Bindings.bindBidirectional(button6.disableProperty(), model.getBoard()[5].disableProperty());
-        Bindings.bindBidirectional(button7.disableProperty(), model.getBoard()[6].disableProperty());
-        Bindings.bindBidirectional(button8.disableProperty(), model.getBoard()[7].disableProperty());
-        Bindings.bindBidirectional(button9.disableProperty(), model.getBoard()[8].disableProperty());
-
-        Bindings.bindBidirectional(button1.textProperty(), model.getBoard()[0].textProperty());
-        Bindings.bindBidirectional(button2.textProperty(), model.getBoard()[1].textProperty());
-        Bindings.bindBidirectional(button3.textProperty(), model.getBoard()[2].textProperty());
-        Bindings.bindBidirectional(button4.textProperty(), model.getBoard()[3].textProperty());
-        Bindings.bindBidirectional(button5.textProperty(), model.getBoard()[4].textProperty());
-        Bindings.bindBidirectional(button6.textProperty(), model.getBoard()[5].textProperty());
-        Bindings.bindBidirectional(button7.textProperty(), model.getBoard()[6].textProperty());
-        Bindings.bindBidirectional(button8.textProperty(), model.getBoard()[7].textProperty());
-        Bindings.bindBidirectional(button9.textProperty(), model.getBoard()[8].textProperty());
+        Bindings.bindBidirectional(button1.textProperty(), model.getBoard()[0]);
+        Bindings.bindBidirectional(button2.textProperty(), model.getBoard()[1]);
+        Bindings.bindBidirectional(button3.textProperty(), model.getBoard()[2]);
+        Bindings.bindBidirectional(button4.textProperty(), model.getBoard()[3]);
+        Bindings.bindBidirectional(button5.textProperty(), model.getBoard()[4]);
+        Bindings.bindBidirectional(button6.textProperty(), model.getBoard()[5]);
+        Bindings.bindBidirectional(button7.textProperty(), model.getBoard()[6]);
+        Bindings.bindBidirectional(button8.textProperty(), model.getBoard()[7]);
+        Bindings.bindBidirectional(button9.textProperty(), model.getBoard()[8]);
 
         playerScoreLabel.textProperty().bind(model.PlayerScoreProperty());
         winner.textProperty().bind(model.winnerProperty());
-        Bindings.bindBidirectional(newMatch.disableProperty(), model.newMatchProperty());
+        Bindings.bindBidirectional(startRound.disableProperty(), model.restartRoundProperty());
+        gameMode.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setGameMode(newValue));
 
     }
+
+    private void setGameMode(String newValue) {
+        if (newValue != null && newValue.equals("SinglePlayer")) {
+            model.setPlayerMode(true);
+            model.ifComputerTurn();
+            startRound.setDisable(false);
+        } else if (newValue != null && newValue.equals("MultiPlayer")) {
+            startRound.setDisable(false);
+        }
+    }
+
 
     public void onButtonClicked(ActionEvent actionEvent) {
 
@@ -125,9 +121,9 @@ public class TicTacToeController {
 
 
     }
-    public void restartGame(ActionEvent event) {
+    public void restartRound(ActionEvent event) {
         model.resetBoard();
-        newMatch.setDisable(true);
+        startRound.setDisable(true);
     }
 
 }

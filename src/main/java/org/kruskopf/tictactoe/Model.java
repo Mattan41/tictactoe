@@ -2,15 +2,12 @@ package org.kruskopf.tictactoe;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.control.Button;
 import javafx.util.Duration;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class Model {
@@ -21,27 +18,27 @@ public class Model {
     private StringProperty winner = new SimpleStringProperty("tic-tac-toe");
     private StringProperty playerScore = new SimpleStringProperty("Player 1: " + player1Score + " wins\nPlayer 2: " + player2Score + " wins");
     private BooleanProperty newMatch = new SimpleBooleanProperty(true);
+
     private Random random;
     private boolean singlePlayer;
     private int boardcount;
 
-    Button[] board;
     private final BooleanProperty disable = new SimpleBooleanProperty(false);
-    private final StringProperty text = new SimpleStringProperty("");
+    StringProperty[] board;
 
-    public Button[] getBoard() {
+
+    private StringProperty text = new SimpleStringProperty("");
+
+    public StringProperty textProperty() {
+        return text;
+    }
+
+    public StringProperty[] getBoard() {
         return board;
     }
 
-
-    public void setBoard(Button[] board) {
-        this.board = board;
-    }
     public BooleanProperty disableProperty() {
         return disable;
-    }
-    public StringProperty textProperty() {
-        return text;
     }
     public String getWinner() {
         return winner.get();
@@ -50,33 +47,31 @@ public class Model {
         this.winner.set(winner);
     }
 
-
-    public Model(boolean singlePlayer) {
+    public void setPlayerMode(boolean singlePlayer) {
         this.singlePlayer = singlePlayer;
-        board = new Button[9];
+    }
+
+    public Model() {
+
+        board = new StringProperty[9];
         for (int i = 0; i < board.length; i++) {
-            board[i] = new Button();
-            board[i].setDisable(false);
-            board[i].setText("");
+            board[i] = new SimpleStringProperty(" ");
         }
-        newMatch = newMatchProperty();
+        newMatch = restartRoundProperty();
         random = new Random();
     }
 
     public void setSymbolAndDisable(int index) {
         if (playerTurn == PlayerTurn.PLAYER1) {
-            board[index].setText("X");
-            board[index].setStyle("-fx-text-fill: blue;");
-            board[index].setDisable(true);
+            board[index].set("X");
             playerTurn = PlayerTurn.PLAYER2;
-        } else {
-            board[index].setText("O");
-            board[index].setDisable(true);
-            board[index].setStyle("-fx-text-fill: red;");
+
+        } else if(playerTurn == PlayerTurn.PLAYER2){
+            board[index].set("O");
             playerTurn = PlayerTurn.PLAYER1;
         }
-        boardcount++;
         checkGameOver();
+        boardcount++;
         ifComputerTurn();
     }
 
@@ -85,7 +80,7 @@ public class Model {
         return playerScore;
     }
 
-    public BooleanProperty newMatchProperty(){
+    public BooleanProperty restartRoundProperty(){
         return newMatch;
     }
 
@@ -105,14 +100,14 @@ public class Model {
             for (int i = 0; i < 8; i++) {
 
                 String line = switch (i){
-                    case 0 -> board[0].getText() + board[1].getText()+ board[2].getText();
-                    case 1 -> board[3].getText() + board[4].getText()+ board[5].getText();
-                    case 2 -> board[6].getText() + board[7].getText()+ board[8].getText();
-                    case 3 -> board[0].getText() + board[3].getText()+ board[6].getText();
-                    case 4 -> board[1].getText() + board[4].getText()+ board[7].getText();
-                    case 5 -> board[2].getText() + board[5].getText()+ board[8].getText();
-                    case 6 -> board[0].getText() + board[4].getText()+ board[8].getText();
-                    case 7 -> board[2].getText() + board[4].getText()+ board[6].getText();
+                    case 0 -> board[0].get() + board[1].get()+ board[2].get();
+                    case 1 -> board[3].get() + board[4].get()+ board[5].get();
+                    case 2 -> board[6].get() + board[7].get()+ board[8].get();
+                    case 3 -> board[0].get() + board[3].get()+ board[6].get();
+                    case 4 -> board[1].get() + board[4].get()+ board[7].get();
+                    case 5 -> board[2].get() + board[5].get()+ board[8].get();
+                    case 6 -> board[0].get() + board[4].get()+ board[8].get();
+                    case 7 -> board[2].get() + board[4].get()+ board[6].get();
                     default -> null;
                 };
                 if (line.equals("XXX")) {
@@ -131,26 +126,27 @@ public class Model {
             }
     }
 
-    public boolean isGameOver() {
-        return Arrays.stream(board).anyMatch(button -> !button.isDisabled());
-        //ToDo: Draw -  kolla om inget index har tomt  är tom text draw.
-    }
+    //public boolean isGameOver() {
+        //return Arrays.stream(board).anyMatch(button -> !button.isDisabled());
+        //ToDo: Draw -  kolla om inget index har tomt är tom text draw.
+    //}
 
     public void matchOver() {
-        for (Button button : board) {
-            button.setDisable(true);
+        for (StringProperty stringProperty : board) {
+            if (stringProperty.get().isEmpty())
+                stringProperty.set(" ");
         }
         playerTurn = PlayerTurn.PLAYER1;
         setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
         boardcount=0;
         newMatch.set(false);
+
     }
 
    public void resetBoard() {
-        for (Button button : board) {
-            button.setDisable(false);
-            button.setText("");
-        }
+       for (StringProperty stringProperty : board) {
+           stringProperty.set("");
+       }
         winner.set("Tic-Tac-Toe");
     }
 
@@ -167,7 +163,7 @@ public class Model {
 
             do {
                 randomIndex = random.nextInt(9);
-            } while (!board[randomIndex].getText().isEmpty());
+            } while (!board[randomIndex].get().isEmpty());
 
             index = randomIndex;
 
@@ -176,17 +172,14 @@ public class Model {
                     ae -> setSymbolAndDisable(index)));
              timeline.play();
 
+
+
              //TODO: disable scene while waiting. Platform.runLater();
             // TODO: Check på vems tur det är och ignorera klick på buttons om det inte är dens spelarens tur
 
         }
     }
 
-/*
-    public enum PlayerTurn {
-        PLAYER1, PLAYER2
-    }
-*/
 }
 
 
