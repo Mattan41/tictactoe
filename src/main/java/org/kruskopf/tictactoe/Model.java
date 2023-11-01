@@ -2,6 +2,7 @@ package org.kruskopf.tictactoe;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -154,11 +155,6 @@ public class Model {
     }
 
 
-
-
-
-    //dator nedan
-
     public boolean isComputerTurn() {
        return singlePlayer && playerTurn == PlayerTurn.PLAYER2;
     }
@@ -178,44 +174,23 @@ public class Model {
             Timeline timeline = new Timeline(new KeyFrame(
                     Duration.millis(500 + (Math.random() * 1000)),
                     ae -> setSymbolAndDisable(index)));
-            timeline.play();
-            //TODO: disable scene while waiting
-        }
-    }
+             timeline.play();
 
-   /* public void ifComputerTurn() {
-        if (isComputerTurn()) {
-
-            int randomIndex;
-            int index;
-
-            do {
-                randomIndex = random.nextInt(9);
-            } while (!board[randomIndex].getText().isEmpty());
-
-            index = randomIndex;
-
-            try {
-                Thread.sleep((long) (500 + (Math.random() * 1000))); // Vänta i 0.5-1.5 sekunder
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            setSymbolAndDisable(index);
+             //TODO: disable scene while waiting. Platform.runLater();
+            // TODO: Check på vems tur det är och ignorera klick på buttons om det inte är dens spelarens tur
 
         }
     }
 
-
-    */
-
+/*
     public enum PlayerTurn {
         PLAYER1, PLAYER2
     }
-
+*/
 }
 
 
 //Todo: Draw replace boardCount with method to check anyEmpty
 //toDo: add tests
-//TODo: MultiPlayer
+//TODo: MultiPlayer, Network klient?
+//Todo:
