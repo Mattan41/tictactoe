@@ -112,7 +112,6 @@ public class TicTacToeController {
         }
     }
 
-
     public void onButtonClicked(ActionEvent actionEvent) {
 
         Button button = (Button) actionEvent.getSource();

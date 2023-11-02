@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.beans.property.*;
 import javafx.util.Duration;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Model {
@@ -13,13 +14,12 @@ public class Model {
     int player1Score = 0;
     int player2Score = 0;
     private StringProperty winner = new SimpleStringProperty("tic-tac-toe");
-    private StringProperty playerScore = new SimpleStringProperty("Player 1: " + player1Score + " wins\nPlayer 2: " + player2Score + " wins");
+    private StringProperty playerScore = new SimpleStringProperty("Player 1: " + player1Score + " points\nPlayer 2: " + player2Score + " points");
     private BooleanProperty restartRound = new SimpleBooleanProperty(true);
     private BooleanProperty endGame = new SimpleBooleanProperty(false);
     private BooleanProperty gameMode = new SimpleBooleanProperty(false);
     private Random random;
     private boolean singlePlayer;
-    private int boardcount;
 
     private final BooleanProperty disable = new SimpleBooleanProperty(false);
     StringProperty[] board;
@@ -68,8 +68,7 @@ public class Model {
             board[index].set("O");
             playerTurn = PlayerTurn.PLAYER1;
         }
-        checkGameOver();
-        boardcount++;
+        checkForDrawOrWinnerOfRound();
         ifComputerTurn();
     }
 
@@ -94,47 +93,53 @@ public class Model {
     public void setPlayerScore(String playerScore) {
         this.playerScore.set(playerScore);
     }
-    void checkGameOver() {
+    void checkForDrawOrWinnerOfRound() {
 
-        if (boardcount==9){
+        checkForDrawRound();
+        checkForWinnerOfRound();
+    }
+
+    private void checkForWinnerOfRound() {
+        for (int i = 0; i < 8; i++) {
+
+            String line = switch (i){
+                case 0 -> board[0].get() + board[1].get()+ board[2].get();
+                case 1 -> board[3].get() + board[4].get()+ board[5].get();
+                case 2 -> board[6].get() + board[7].get()+ board[8].get();
+                case 3 -> board[0].get() + board[3].get()+ board[6].get();
+                case 4 -> board[1].get() + board[4].get()+ board[7].get();
+                case 5 -> board[2].get() + board[5].get()+ board[8].get();
+                case 6 -> board[0].get() + board[4].get()+ board[8].get();
+                case 7 -> board[2].get() + board[4].get()+ board[6].get();
+                default -> null;
+            };
+            if (line.equals("XXX")) {
+                winner.set("Player 1 won!");
+                player1Score++;
+                matchOver();
+                break;
+            }
+            else if(line.equals("OOO")) {
+                winner.set("Player 2 won!");
+                player2Score++;
+                matchOver();
+                break;
+
+            }
+
+        }
+    }
+
+    private void checkForDrawRound() {
+        if (isRoundDraw()){
             winner.set("It's a draw!");
             matchOver();
         }
-        else
-            for (int i = 0; i < 8; i++) {
-
-                String line = switch (i){
-                    case 0 -> board[0].get() + board[1].get()+ board[2].get();
-                    case 1 -> board[3].get() + board[4].get()+ board[5].get();
-                    case 2 -> board[6].get() + board[7].get()+ board[8].get();
-                    case 3 -> board[0].get() + board[3].get()+ board[6].get();
-                    case 4 -> board[1].get() + board[4].get()+ board[7].get();
-                    case 5 -> board[2].get() + board[5].get()+ board[8].get();
-                    case 6 -> board[0].get() + board[4].get()+ board[8].get();
-                    case 7 -> board[2].get() + board[4].get()+ board[6].get();
-                    default -> null;
-                };
-                if (line.equals("XXX")) {
-                    winner.set("Player 1 won!");
-                    player1Score++;
-                    matchOver();
-                    break;
-                }
-                else if(line.equals("OOO")) {
-                    winner.set("Player 2 won!");
-                    player2Score++;
-                    matchOver();
-                    break;
-
-                }
-            }
     }
-    //public boolean isGameOver() {
-    //return Arrays.stream(board).anyMatch(button -> !button.isDisabled());
 
-    //ToDo: Draw -  kolla om inget index har tomt är tom text draw.
-
-    //}
+    public boolean isRoundDraw() {
+        return Arrays.stream(board).noneMatch(s -> s.get().isEmpty());
+    }
 
     public void matchOver() {
         for (StringProperty stringProperty : board) {
@@ -142,8 +147,7 @@ public class Model {
                 stringProperty.set(" ");
         }
         playerTurn = PlayerTurn.PLAYER1;
-        setPlayerScore("Player 1: " + player1Score + " wins\nPlayer 2: "+ player2Score +" wins");
-        boardcount=0;
+        setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +" points");
         restartRound.set(false);
 
     }
@@ -193,11 +197,13 @@ public class Model {
         else if (player1Score==player2Score)
             winner.set("It is a tie!");
 
+        player1Score=0;
+        player2Score=0;
+        setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +" points");
         gameMode.set(false);
     }
 }
 
 
-//Todo: Draw replace boardCount with method to check anyEmpty
 //toDo: add tests
-//TODo: MultiPlayer, Network klient?
+//TODo: MultiPlayer, HTTP Network klient?
