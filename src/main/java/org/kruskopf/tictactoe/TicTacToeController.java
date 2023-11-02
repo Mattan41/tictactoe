@@ -3,6 +3,7 @@ package org.kruskopf.tictactoe;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -114,6 +115,7 @@ public class TicTacToeController {
         }
     }
 
+
     public void onButtonClicked(ActionEvent actionEvent) {
 
         Button button = (Button) actionEvent.getSource();
@@ -121,8 +123,12 @@ public class TicTacToeController {
         int col = GridPane.getColumnIndex(button);
         int index = (row * 3) + col;
 
-        model.setSymbolAndDisable(index);
 
+        if (!model.isSinglePlayer()) {
+            HttpPublish.sendMessageToServer(index);
+        } else if (model.isSinglePlayer()) {
+            model.setSymbolAndDisable(index);
+        }
 
     }
     public void restartRound(ActionEvent event) {
@@ -135,3 +141,4 @@ public class TicTacToeController {
         model.endGameAndDeclareWinner();
     }
 }
+

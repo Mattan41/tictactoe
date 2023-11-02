@@ -19,6 +19,11 @@ public class Model {
     private BooleanProperty endGame = new SimpleBooleanProperty(false);
     private BooleanProperty gameMode = new SimpleBooleanProperty(false);
     private Random random;
+
+    public boolean isSinglePlayer() {
+        return singlePlayer;
+    }
+
     private boolean singlePlayer;
 
     private final BooleanProperty disable = new SimpleBooleanProperty(false);
@@ -48,6 +53,7 @@ public class Model {
     public void setSinglePlayerMode(boolean singlePlayer) {
         this.singlePlayer = singlePlayer;
     }
+
 
     public Model() {
 
@@ -182,9 +188,6 @@ public class Model {
                     ae -> setSymbolAndDisable(index)));
              timeline.play();
 
-             //TODO: disable scene while waiting. Platform.runLater();
-            // TODO: Check på vems tur det är och ignorera klick på buttons om det inte är dens spelarens tur
-
         }
     }
 
@@ -203,6 +206,4 @@ public class Model {
     }
 }
 
-
-//toDo: add tests
-//TODo: MultiPlayer, HTTP Network klient?
+// TODO: Check på vems tur det är och ignorera klick på buttons om det inte är dens spelarens tur.
