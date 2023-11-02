@@ -68,6 +68,7 @@ public class Model {
             board[index].set("O");
             playerTurn = PlayerTurn.PLAYER1;
         }
+
         checkForDrawOrWinnerOfRound();
         ifComputerTurn();
     }
@@ -99,7 +100,7 @@ public class Model {
         checkForWinnerOfRound();
     }
 
-    private void checkForWinnerOfRound() {
+    public void checkForWinnerOfRound() {
         for (int i = 0; i < 8; i++) {
 
             String line = switch (i){
@@ -116,13 +117,13 @@ public class Model {
             if (line.equals("XXX")) {
                 winner.set("Player 1 won!");
                 player1Score++;
-                matchOver();
+                roundOver();
                 break;
             }
             else if(line.equals("OOO")) {
                 winner.set("Player 2 won!");
                 player2Score++;
-                matchOver();
+                roundOver();
                 break;
 
             }
@@ -131,17 +132,17 @@ public class Model {
     }
 
     private void checkForDrawRound() {
-        if (isRoundDraw()){
+        if (roundIsDraw()){
             winner.set("It's a draw!");
-            matchOver();
+            roundOver();
         }
     }
 
-    public boolean isRoundDraw() {
+    public boolean roundIsDraw() {
         return Arrays.stream(board).noneMatch(s -> s.get().isEmpty());
     }
 
-    public void matchOver() {
+    public void roundOver() {
         for (StringProperty stringProperty : board) {
             if (stringProperty.get().isEmpty())
                 stringProperty.set(" ");
@@ -181,8 +182,6 @@ public class Model {
                     ae -> setSymbolAndDisable(index)));
              timeline.play();
 
-
-
              //TODO: disable scene while waiting. Platform.runLater();
             // TODO: Check på vems tur det är och ignorera klick på buttons om det inte är dens spelarens tur
 
@@ -191,11 +190,11 @@ public class Model {
 
     public void endGameAndDeclareWinner() {
         if (player1Score>player2Score)
-            winner.set("Player1 won the Shablam!");
+            winner.set("Player1 won: " + player1Score + "-" + player2Score);
         else if (player1Score<player2Score)
-            winner.set("Player2 won the Shablam!");
+            winner.set("Player2 won: " + player2Score + "-" + player1Score);
         else if (player1Score==player2Score)
-            winner.set("It is a tie!");
+            winner.set("It is a tie! " + player1Score + "-" + player2Score);
 
         player1Score=0;
         player2Score=0;

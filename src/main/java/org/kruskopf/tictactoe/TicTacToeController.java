@@ -1,6 +1,7 @@
 package org.kruskopf.tictactoe;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,6 +9,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+
+import java.util.Arrays;
 
 public class TicTacToeController {
 
@@ -71,7 +74,6 @@ public class TicTacToeController {
         button9.setStyle(buttonStyle);
 
 
-
         button1.disableProperty().bind(Bindings.isNotEmpty(model.getBoard()[0]));
         button2.disableProperty().bind(Bindings.isNotEmpty(model.getBoard()[1]));
         button3.disableProperty().bind(Bindings.isNotEmpty(model.getBoard()[2]));
@@ -119,8 +121,6 @@ public class TicTacToeController {
         int col = GridPane.getColumnIndex(button);
         int index = (row * 3) + col;
 
-        //int index = Arrays.asList(model.getBoard()).indexOf(button);
-            //denna funkar inte...
         model.setSymbolAndDisable(index);
 
 
