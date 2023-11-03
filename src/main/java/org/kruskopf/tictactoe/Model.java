@@ -206,4 +206,4 @@ public class Model {
     }
 }
 
-// TODO: Check på vems tur det är och ignorera klick på buttons om det inte är dens spelarens tur.
+// TODO: Välja X eller O, multiplayer and single player? Check på vems tur det är och ignorera klick på buttons om det inte är dens spelarens tur
