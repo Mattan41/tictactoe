@@ -157,6 +157,8 @@ public class TicTacToeController {
 
     public void endGame(ActionEvent actionEvent) {
         model.endGameAndDeclareWinner();
+        model.roundOver();
+        startRound.setDisable(true);
         symbolMenu.setDisable(false);
     }
 }
