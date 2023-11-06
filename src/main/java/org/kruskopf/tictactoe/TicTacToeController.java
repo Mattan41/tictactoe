@@ -110,11 +110,14 @@ public class TicTacToeController {
         if (newValue != null && newValue.equals("SinglePlayer")) {
             model.setSinglePlayerMode(true);
             model.ifComputerTurn();
-            startRound.setDisable(false);
+
         } else if (newValue != null && newValue.equals("MultiPlayer")) {
-            startRound.setDisable(false);
+
             model.setSinglePlayerMode(false);
+            //Host.setDisable(false);
+            //Join.setDisable(false)
         }
+        symbolMenu.setDisable(false);
     }
 
 
@@ -127,6 +130,8 @@ public class TicTacToeController {
 
 
         if (!model.isSinglePlayer()) {
+            //TODO: Lägga till om man är Server/Host så uppdatera modellen direkt
+            // om man är klient/join köra HttpPublish
             HttpPublish.sendMessageToServer(index);
         } else if (model.isSinglePlayer()) {
             model.setSymbolAndDisable(index);
@@ -141,6 +146,7 @@ public class TicTacToeController {
         model.setSymbolChoiceForPlayer2(symbol.equals("X") ? "O" : "X");
 
         symbolMenu.setDisable(true);
+        startRound.setDisable(false);
     }
 
     public void restartRound(ActionEvent event) {
