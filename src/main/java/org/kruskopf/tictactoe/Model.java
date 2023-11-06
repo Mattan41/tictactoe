@@ -138,13 +138,13 @@ public class Model {
                 case 7 -> board[2].get() + board[4].get()+ board[6].get();
                 default -> null;
             };
-            if (line.equals("XXX")) {
+            if (line.equals(player1.getSymbol() + player1.getSymbol() + player1.getSymbol())) {
                 winner.set("Player 1 won!");
                 player1Score++;
                 roundOver();
                 break;
             }
-            else if(line.equals("OOO")) {
+            else if(line.equals(player2.getSymbol() + player2.getSymbol() + player2.getSymbol())) {
                 winner.set("Player 2 won!");
                 player2Score++;
                 roundOver();
