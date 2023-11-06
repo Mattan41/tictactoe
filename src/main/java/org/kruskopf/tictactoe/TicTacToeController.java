@@ -5,7 +5,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class TicTacToeController {
 
@@ -52,6 +54,15 @@ public class TicTacToeController {
     @FXML
     private Button endGame;
     private String mode;
+
+
+    @FXML
+    private VBox modalBox;
+    @FXML
+    private Button hostGameButton;
+
+    @FXML
+    private Button joinGameButton;
 
 
 
@@ -114,8 +125,7 @@ public class TicTacToeController {
         } else if (newValue != null && newValue.equals("MultiPlayer")) {
 
             model.setSinglePlayerMode(false);
-            //Host.setDisable(false);
-            //Join.setDisable(false)
+            openModal();
         }
         symbolMenu.setDisable(false);
     }
@@ -160,6 +170,25 @@ public class TicTacToeController {
         model.roundOver();
         startRound.setDisable(true);
         symbolMenu.setDisable(false);
+    }
+
+
+    public void hostGame() {
+        // Do something
+    }
+
+    public void joinGame() {
+        // Do something
+    }
+
+    public void openModal() {
+        modalBox.setVisible(true);
+    }
+
+    public void closeModal() {
+        modalBox.setVisible(false);
+        Stage stage = (Stage) modalBox.getScene().getWindow();
+        stage.close();
     }
 }
 

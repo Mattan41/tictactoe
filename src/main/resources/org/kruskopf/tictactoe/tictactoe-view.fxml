@@ -65,4 +65,12 @@
          </MenuButton>
       </AnchorPane>
    </center>
+   <right>
+      <VBox fx:id="modalBox" prefHeight="200.0" prefWidth="200.0" visible="false">
+         <Button fx:id="hostGameButton" onAction="#hostGame" text="Host Game" />
+         <Button fx:id="joinGameButton" onAction="#joinGame" text="Join Game" />
+      </VBox>
+   </right>
 </BorderPane>
+
+
