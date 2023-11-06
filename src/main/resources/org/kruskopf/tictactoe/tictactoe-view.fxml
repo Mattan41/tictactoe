@@ -57,6 +57,12 @@
                <Font name="System Italic" size="12.0" />
             </font>
          </Button>
+         <MenuButton fx:id ="symbolMenu" layoutX="70.0" layoutY="427.0" mnemonicParsing="false" text="Choose X or O">
+           <items>
+             <MenuItem fx:id="symbolChoiceX" mnemonicParsing="false" onAction="#symbolChoice" text="X" />
+             <MenuItem fx:id="symbolChoiceO" mnemonicParsing="false" onAction="#symbolChoice" text="O" />
+           </items>
+         </MenuButton>
       </AnchorPane>
    </center>
 </BorderPane>

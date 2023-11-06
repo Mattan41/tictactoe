@@ -10,7 +10,12 @@ import java.util.Random;
 
 public class Model {
 
+    StringProperty[] board;
     public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
+    private Player player1;
+    private Player player2;
+
+
     int player1Score = 0;
     int player2Score = 0;
     private StringProperty winner = new SimpleStringProperty("tic-tac-toe");
@@ -20,16 +25,10 @@ public class Model {
     private BooleanProperty gameMode = new SimpleBooleanProperty(false);
     private Random random;
 
-    public boolean isSinglePlayer() {
-        return singlePlayer;
-    }
-
     private boolean singlePlayer;
 
+
     private final BooleanProperty disable = new SimpleBooleanProperty(false);
-    StringProperty[] board;
-
-
     private StringProperty text = new SimpleStringProperty("");
 
     public StringProperty textProperty() {
@@ -43,11 +42,17 @@ public class Model {
     public BooleanProperty disableProperty() {
         return disable;
     }
+
     public String getWinner() {
         return winner.get();
     }
+
     public void setWinner(String winner) {
         this.winner.set(winner);
+    }
+
+    public boolean isSinglePlayer() {
+        return singlePlayer;
     }
 
     public void setSinglePlayerMode(boolean singlePlayer) {
@@ -57,6 +62,8 @@ public class Model {
 
     public Model() {
 
+        player1 = new Player("");
+        player2 = new Player("");
         board = new StringProperty[9];
         for (int i = 0; i < board.length; i++) {
             board[i] = new SimpleStringProperty(" ");
@@ -66,18 +73,19 @@ public class Model {
     }
 
     public void setSymbolAndDisable(int index) {
-        if (playerTurn == PlayerTurn.PLAYER1) {
-            board[index].set("X");
-            playerTurn = PlayerTurn.PLAYER2;
 
-        } else if(playerTurn == PlayerTurn.PLAYER2){
-            board[index].set("O");
+        if (playerTurn == PlayerTurn.PLAYER1) {
+            board[index].set(player1.getSymbol());
+            playerTurn = PlayerTurn.PLAYER2;
+        } else if (playerTurn == PlayerTurn.PLAYER2) {
+            board[index].set(player2.getSymbol());
             playerTurn = PlayerTurn.PLAYER1;
         }
 
         checkForDrawOrWinnerOfRound();
         ifComputerTurn();
     }
+
 
 
     public StringProperty PlayerScoreProperty() {
@@ -204,6 +212,13 @@ public class Model {
         setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +" points");
         gameMode.set(false);
     }
-}
 
-// TODO: Välja X eller O, multiplayer and single player? Check på vems tur det är och ignorera klick på buttons om det inte är dens spelarens tur
+    public void setSymbolChoiceForPlayer1(String o) {
+        player1.setSymbol(o);
+
+    }
+    public void setSymbolChoiceForPlayer2(String o) {
+        player2.setSymbol(o);
+
+    }
+}

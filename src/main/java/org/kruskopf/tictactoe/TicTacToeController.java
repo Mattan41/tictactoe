@@ -1,19 +1,20 @@
 package org.kruskopf.tictactoe;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
-import java.util.Arrays;
-
 public class TicTacToeController {
+
+    @FXML
+    private MenuButton symbolMenu;
+    @FXML
+    private MenuItem symbolChoiceO;
+    @FXML
+    private MenuItem symbolChoiceX;
 
 
 
@@ -102,6 +103,7 @@ public class TicTacToeController {
         Bindings.bindBidirectional(gameMode.disableProperty(), model.gameModeProperty());
         gameMode.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setGameMode(newValue));
 
+
     }
 
     private void setGameMode(String newValue) {
@@ -131,6 +133,16 @@ public class TicTacToeController {
         }
 
     }
+
+    public void symbolChoice(ActionEvent event) {
+        MenuItem selectedMenuItem = (MenuItem) event.getSource();
+        String symbol = selectedMenuItem.getText();
+        model.setSymbolChoiceForPlayer1(symbol);
+        model.setSymbolChoiceForPlayer2(symbol.equals("X") ? "O" : "X");
+
+        symbolMenu.setDisable(true);
+    }
+
     public void restartRound(ActionEvent event) {
         model.resetBoard();
         startRound.setDisable(true);
@@ -139,6 +151,7 @@ public class TicTacToeController {
 
     public void endGame(ActionEvent actionEvent) {
         model.endGameAndDeclareWinner();
+        symbolMenu.setDisable(false);
     }
 }
 
