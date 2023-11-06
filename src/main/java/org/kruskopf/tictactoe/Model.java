@@ -72,12 +72,22 @@ public class Model {
         random = new Random();
     }
 
-    public void setSymbolAndDisable(int index) {
-
-        if (playerTurn == PlayerTurn.PLAYER1) {
+    public void setSymbolAndDisableForPlayer1(int index) {
+        if (playerTurn == PlayerTurn.PLAYER2)
+            return;
+        else if (playerTurn == PlayerTurn.PLAYER1) {
             board[index].set(player1.getSymbol());
             playerTurn = PlayerTurn.PLAYER2;
-        } else if (playerTurn == PlayerTurn.PLAYER2) {
+        }
+
+        checkForDrawOrWinnerOfRound();
+        ifComputerTurn();
+    }
+
+    public void setSymbolAndDisableForPlayer2(int index) {
+        if (playerTurn == PlayerTurn.PLAYER1)
+            return;
+        else if (playerTurn == PlayerTurn.PLAYER2) {
             board[index].set(player2.getSymbol());
             playerTurn = PlayerTurn.PLAYER1;
         }
@@ -193,7 +203,7 @@ public class Model {
 
             Timeline timeline = new Timeline(new KeyFrame(
                     Duration.millis(500 + (Math.random() * 1000)),
-                    ae -> setSymbolAndDisable(index)));
+                    ae -> setSymbolAndDisableForPlayer2(index)));
              timeline.play();
 
         }

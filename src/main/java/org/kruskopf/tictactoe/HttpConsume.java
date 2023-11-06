@@ -25,7 +25,7 @@ public class HttpConsume {
                     reader.lines().forEach(line -> {
                         // process each line here
                         Platform.runLater(() -> {
-                            model.setSymbolAndDisable(Integer.parseInt(line));
+                            model.setSymbolAndDisableForPlayer2(Integer.parseInt(line));
                         });
                     });
                 });

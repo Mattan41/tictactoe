@@ -134,7 +134,7 @@ public class TicTacToeController {
             // om man är klient/join köra HttpPublish
             HttpPublish.sendMessageToServer(index);
         } else if (model.isSinglePlayer()) {
-            model.setSymbolAndDisable(index);
+            model.setSymbolAndDisableForPlayer1(index);
         }
 
     }
