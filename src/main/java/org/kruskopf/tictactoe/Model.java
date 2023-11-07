@@ -35,6 +35,15 @@ public class Model {
 
     private boolean singlePlayer;
 
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    private boolean gameOver;
     private boolean gameHost;
 
     public boolean isGameHost() {
@@ -76,7 +85,6 @@ public class Model {
         this.singlePlayer = singlePlayer;
     }
 
-
     public Model() {
 
         player1 = new Player("");
@@ -98,8 +106,9 @@ public class Model {
             playerTurn = PlayerTurn.PLAYER2;
         }
 
-        ifComputerTurn();
         checkForDrawOrWinnerOfRound();
+        if (!isGameOver())
+            ifComputerTurn();
     }
 
     public void setSymbolAndDisableForPlayer2(int index) {
@@ -110,8 +119,9 @@ public class Model {
             playerTurn = PlayerTurn.PLAYER1;
         }
 
+
         checkForDrawOrWinnerOfRound();
-        ifComputerTurn();
+
     }
 
 
@@ -189,10 +199,9 @@ public class Model {
             if (stringProperty.get().isEmpty())
                 stringProperty.set(" ");
         }
-        playerTurn = PlayerTurn.PLAYER1; //TODO: ta bort denna och lösa att datorn inte gör drag om gameOver
         setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +" points");
         restartRound.set(false);
-
+        setGameOver(true);
     }
 
    public void resetBoard() {
@@ -201,7 +210,7 @@ public class Model {
        }
         winner.set("Tic-Tac-Toe");
        ifComputerTurn();
-
+       setGameOver(false);
    }
 
 
@@ -308,9 +317,7 @@ public class Model {
                         Platform.runLater(() -> {
                             try {
                                 setSymbolAndDisable(index);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            } catch (InterruptedException e) {
+                            } catch (IOException | InterruptedException e) {
                                 throw new RuntimeException(e);
                             }
                         });
