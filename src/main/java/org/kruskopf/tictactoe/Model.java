@@ -250,6 +250,7 @@ public class Model {
         player2Score=0;
         setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +" points");
         gameMode.set(false);
+        playerTurn = PlayerTurn.PLAYER1;
 
     }
 
