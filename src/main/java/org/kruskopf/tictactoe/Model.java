@@ -2,12 +2,13 @@ package org.kruskopf.tictactoe;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.layout.Border;
 import javafx.util.Duration;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -264,7 +265,7 @@ public class Model {
                 client.send(request,HttpResponse.BodyHandlers.discarding());
     }
 
-    public void setSymbolAndDisable(int index) {
+    public void setSymbolAndDisable(int index) throws IOException, InterruptedException {
 
             if (!isSinglePlayer()) {
                 //TODO: Lägga till om man är Server/Host på modellen, sortering i modellen beroende på vilken roll, även singel/multiplayer där?
@@ -286,9 +287,47 @@ public class Model {
         }
     }
 
-    private void sendMessage(int index, String player) {
-
+    private void sendMessage(int index, String player) throws IOException, InterruptedException {
+        sendMessageToServer(player, index);
     }
 
+    private void receiveMessage() {
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://ntfy.sh/M4TS_F4NT4STISK4_SPEL/raw"))
+                .build();
+
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
+                .thenApply(HttpResponse::body)
+                .thenAccept(inputStream -> {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    reader.lines().forEach(line -> {
+
+                        int index = getIndexPosition(line);
+                        Platform.runLater(() -> {
+                            try {
+                                setSymbolAndDisable(index);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+                    });
+                });
+    }
+
+    public static int getIndexPosition(String line) {
+
+        int index=0;
+
+        if (line.startsWith("P1:"))
+            index = Integer.parseInt(line.substring(line.length() - 1));
+         else if(line.startsWith("P2:"))
+            index = Integer.parseInt(line.substring(line.length() - 1));
+
+        return index;
+    }
 
 }

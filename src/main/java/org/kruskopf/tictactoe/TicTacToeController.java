@@ -136,7 +136,7 @@ public class TicTacToeController {
     }
 
 
-    public void onButtonClicked(ActionEvent actionEvent) {
+    public void onButtonClicked(ActionEvent actionEvent) throws IOException, InterruptedException {
 
         Button button = (Button) actionEvent.getSource();
         int row = GridPane.getRowIndex(button);
