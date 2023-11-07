@@ -9,6 +9,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
 public class TicTacToeController {
 
     @FXML
@@ -114,7 +120,6 @@ public class TicTacToeController {
         Bindings.bindBidirectional(gameMode.disableProperty(), model.gameModeProperty());
         gameMode.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setGameMode(newValue));
 
-
     }
 
     private void setGameMode(String newValue) {
@@ -125,7 +130,7 @@ public class TicTacToeController {
         } else if (newValue != null && newValue.equals("MultiPlayer")) {
 
             model.setSinglePlayerMode(false);
-            openModal();
+            modalBox.setVisible(true);
         }
         symbolMenu.setDisable(false);
     }
@@ -139,14 +144,7 @@ public class TicTacToeController {
         int index = (row * 3) + col;
 
 
-        if (!model.isSinglePlayer()) {
-            //TODO: Lägga till om man är Server/Host så uppdatera modellen direkt
-            // om man är klient/join köra HttpPublish
-            HttpPublish.sendMessageToServer(index);
-        } else if (model.isSinglePlayer()) {
-            model.setSymbolAndDisableForPlayer1(index);
-        }
-
+        model.setSymbolAndDisable(index);
     }
 
     public void symbolChoice(ActionEvent event) {
@@ -170,25 +168,21 @@ public class TicTacToeController {
         model.roundOver();
         startRound.setDisable(true);
         symbolMenu.setDisable(false);
+        hostGameButton.setDisable(false);
+        joinGameButton.setDisable(false);
     }
 
 
-    public void hostGame() {
-        // Do something
+    public void hostGame(ActionEvent actionEvent) {
+        model.setGameHost(true);
+        hostGameButton.setDisable(true);
+        joinGameButton.setDisable(true);
     }
+    public void joinGame(ActionEvent actionEvent) {
+        model.setGameHost(true);
+        hostGameButton.setDisable(true);
+        joinGameButton.setDisable(true);
 
-    public void joinGame() {
-        // Do something
-    }
-
-    public void openModal() {
-        modalBox.setVisible(true);
-    }
-
-    public void closeModal() {
-        modalBox.setVisible(false);
-        Stage stage = (Stage) modalBox.getScene().getWindow();
-        stage.close();
     }
 }
 

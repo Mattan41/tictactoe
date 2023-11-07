@@ -3,8 +3,15 @@ package org.kruskopf.tictactoe;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.layout.Border;
 import javafx.util.Duration;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -27,6 +34,15 @@ public class Model {
 
     private boolean singlePlayer;
 
+    private boolean gameHost;
+
+    public boolean isGameHost() {
+        return gameHost;
+    }
+
+    public void setGameHost(boolean gameHost) {
+        this.gameHost = gameHost;
+    }
 
     private final BooleanProperty disable = new SimpleBooleanProperty(false);
     private StringProperty text = new SimpleStringProperty("");
@@ -73,15 +89,16 @@ public class Model {
     }
 
     public void setSymbolAndDisableForPlayer1(int index) {
-        if (playerTurn == PlayerTurn.PLAYER2)
+        if (playerTurn == PlayerTurn.PLAYER2) {
             return;
+        }
         else if (playerTurn == PlayerTurn.PLAYER1) {
             board[index].set(player1.getSymbol());
             playerTurn = PlayerTurn.PLAYER2;
         }
 
-        checkForDrawOrWinnerOfRound();
         ifComputerTurn();
+        checkForDrawOrWinnerOfRound();
     }
 
     public void setSymbolAndDisableForPlayer2(int index) {
@@ -171,7 +188,7 @@ public class Model {
             if (stringProperty.get().isEmpty())
                 stringProperty.set(" ");
         }
-        playerTurn = PlayerTurn.PLAYER1;
+        playerTurn = PlayerTurn.PLAYER1; //TODO: ta bort denna och lösa att datorn inte gör drag om gameOver
         setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +" points");
         restartRound.set(false);
 
@@ -182,7 +199,9 @@ public class Model {
            stringProperty.set("");
        }
         winner.set("Tic-Tac-Toe");
-    }
+       ifComputerTurn();
+
+   }
 
 
     public boolean isComputerTurn() {
@@ -221,14 +240,55 @@ public class Model {
         player2Score=0;
         setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +" points");
         gameMode.set(false);
-    }
-
-    public void setSymbolChoiceForPlayer1(String o) {
-        player1.setSymbol(o);
 
     }
-    public void setSymbolChoiceForPlayer2(String o) {
-        player2.setSymbol(o);
+
+    public void setSymbolChoiceForPlayer1(String symbol) {
+        player1.setSymbol(symbol);
 
     }
+    public void setSymbolChoiceForPlayer2(String symbol) {
+        player2.setSymbol(symbol);
+    }
+
+    public void sendMessageToServer(String player, int index) throws IOException, InterruptedException {
+        String positionAtBoard = String.valueOf(index);
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://ntfy.sh/M4TS_F4NT4STISK4_SPEL"))
+                .POST(HttpRequest.BodyPublishers.ofString(player+positionAtBoard))
+                .build();
+
+        HttpResponse<Void> response =
+                client.send(request,HttpResponse.BodyHandlers.discarding());
+    }
+
+    public void setSymbolAndDisable(int index) {
+
+            if (!isSinglePlayer()) {
+                //TODO: Lägga till om man är Server/Host på modellen, sortering i modellen beroende på vilken roll, även singel/multiplayer där?
+                //TODO: om man är klient/join köra HttpPublish i modellen. Om man är Host uppdatera modellen. behöver starta Consume för att ta emot alla
+                //TODO if Host model.setSymbolAndDisableForPlayer1(index);
+                //TODO if Join model.setSymbolAndDisableForPlayer2(index);
+                //senMessageToServer fungerar utanför if-satser, något med gameHost
+                if (!isGameHost()) {
+                    String player= "P2:";
+                    sendMessage(index, player);
+                } else if (isGameHost()) {
+                    String player= "P1:";
+                    sendMessage(index, player);
+                    setSymbolAndDisableForPlayer1(index);
+                }
+            }
+            else if (isSinglePlayer()) {
+            setSymbolAndDisableForPlayer1(index);
+        }
+    }
+
+    private void sendMessage(int index, String player) {
+
+    }
+
+
 }
