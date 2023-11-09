@@ -7,13 +7,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 public class TicTacToeController {
 
@@ -155,8 +150,8 @@ public class TicTacToeController {
     public void symbolChoice(ActionEvent event) {
         MenuItem selectedMenuItem = (MenuItem) event.getSource();
         String symbol = selectedMenuItem.getText();
-        model.setSymbolChoiceForPlayer1(symbol);
-        model.setSymbolChoiceForPlayer2(symbol.equals("X") ? "O" : "X");
+        model.setSymbolChoiceForPlayer(symbol);
+        model.setSymbolChoiceForOpponent(symbol.equals("X") ? "O" : "X");
 
         symbolMenu.setDisable(true);
         startGame.setDisable(false);

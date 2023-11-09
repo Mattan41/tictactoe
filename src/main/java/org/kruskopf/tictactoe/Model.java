@@ -258,12 +258,18 @@ public class Model {
 
     }
 
-    public void setSymbolChoiceForPlayer1(String symbol) {
-        player1.setSymbol(symbol);
+    public void setSymbolChoiceForPlayer(String symbol) {
+        if (!gameHost)
+            player2.setSymbol(symbol);
+        else
+            player1.setSymbol(symbol);
 
     }
-    public void setSymbolChoiceForPlayer2(String symbol) {
-        player2.setSymbol(symbol);
+    public void setSymbolChoiceForOpponent(String symbol) {
+        if (!gameHost)
+            player1.setSymbol(symbol);
+        else
+            player2.setSymbol(symbol);
     }
 
     public void sendMessageToServer(String player, int index) throws IOException, InterruptedException {
