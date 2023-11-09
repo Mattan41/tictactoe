@@ -75,15 +75,15 @@ class ModelTest {
     void checkIfThereIsAWinner() {
         //Arrange
         model.resetBoard();
-        model.board[0].set("O");
-        model.board[1].set("X");
-        model.board[2].set("O");
-        model.board[3].set("X");
-        model.board[4].set("X");
-        model.board[5].set("X");
-        model.board[6].set("X");
-        model.board[7].set("0");
-        model.board[8].set("0");
+        model.board[0].set(model.player2.getSymbol());
+        model.board[1].set(model.player1.getSymbol());
+        model.board[2].set(model.player2.getSymbol());
+        model.board[3].set(model.player1.getSymbol());
+        model.board[4].set(model.player1.getSymbol());
+        model.board[5].set(model.player1.getSymbol());
+        model.board[6].set(model.player1.getSymbol());
+        model.board[7].set(model.player2.getSymbol());
+        model.board[8].set(model.player2.getSymbol());
         //Act
         model.checkForWinnerOfRound();
 

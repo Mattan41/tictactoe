@@ -20,9 +20,8 @@ public class Model {
 
     StringProperty[] board;
     public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
-    private Player player1;
-    private Player player2;
-
+    Player player1;
+    Player player2;
 
     int player1Score = 0;
     int player2Score = 0;
@@ -37,8 +36,9 @@ public class Model {
     private boolean singlePlayer;
 
     private boolean gameOver;
-
     private boolean gameHost;
+    private Thread messageThread;
+
 
     public boolean isGameOver() {
         return gameOver;
@@ -86,6 +86,7 @@ public class Model {
         this.singlePlayer = singlePlayer;
     }
 
+
     public Model() {
 
         player1 = new Player("");
@@ -94,10 +95,11 @@ public class Model {
         for (int i = 0; i < board.length; i++) {
             board[i] = new SimpleStringProperty(" ");
         }
-        startGame = startGameProperty();
+        startGame = startGameProperty(); //ToDO: behöver jag denna i min konstruktor
         restartRound = restartRoundProperty();
         random = new Random();
     }
+
 
     public void setSymbolAndDisableForPlayer1(int index) {
         if (playerTurn == PlayerTurn.PLAYER2) {
@@ -148,7 +150,11 @@ public class Model {
     public void setPlayerScore(String playerScore) {
         this.playerScore.set(playerScore);
     }
-    void checkForDrawOrWinnerOfRound() {
+
+
+
+
+    public void checkForDrawOrWinnerOfRound() {
 
         checkForDrawRound();
         checkForWinnerOfRound();
@@ -252,9 +258,9 @@ public class Model {
         player2Score=0;
         setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +" points");
         gameMode.set(false);
-        playerTurn = PlayerTurn.PLAYER1; //TODO: ta bort denna
+        playerTurn = PlayerTurn.PLAYER1; //TODO: ta bort denna?
         if(singlePlayer)
-            stopGame();
+            stopGame(); //Todo:stoppa readMessage?
 
     }
 
@@ -303,10 +309,10 @@ public class Model {
         }
     }
 
+
     private void sendMessage(int index, String player) throws IOException, InterruptedException {
         sendMessageToServer(player, index);
     }
-
 
     public void stopGame() {
         if (messageThread != null) {
@@ -314,14 +320,13 @@ public class Model {
         }
     }
 
-    private Thread messageThread;
-
     public void startGame() {
         if (!singlePlayer) {
             messageThread = new Thread(this::receiveMessage);
             messageThread.start(); // starta läsning av meddelanden
         }
     }
+
 
     private void receiveMessage() {
         HttpClient client = HttpClient.newHttpClient();
@@ -345,7 +350,7 @@ public class Model {
                             reader.lines().forEach(line -> {
                                 if (line.startsWith("P1:") || line.startsWith("P2:")) {
                                     try {
-                                        int index = Integer.parseInt(line.substring(3));
+                                        int index = getIndexPosition(line);
                                         if (index >= 0 && index <= 8) {
                                             if (line.startsWith("P1:")) {
                                                 Platform.runLater(() -> setSymbolAndDisableForPlayer1(index));
@@ -353,6 +358,7 @@ public class Model {
                                                 Platform.runLater(() -> setSymbolAndDisableForPlayer2(index));
                                             }
                                         }
+
                                     } catch (NumberFormatException e) {
                                         System.err.println("Invalid message format: " + line);
                                     }
@@ -366,9 +372,8 @@ public class Model {
 
 
     public int getIndexPosition(String line) {
-        int index;
-        index = Integer.parseInt(line.substring(line.length() - 1));
-        return index;
+        return Integer.parseInt(line.substring(3));
+
     }
 
 }
