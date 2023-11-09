@@ -36,7 +36,7 @@
          </GridPane>
 
          <Button fx:id="startRound" contentDisplay="CENTER" layoutX="211.0" layoutY="427.0" mnemonicParsing="false" onAction="#restartRound" text="Start Round" />
-         <ChoiceBox fx:id="gameMode" layoutX="169.0" layoutY="62.0" prefWidth="150.0">
+         <ChoiceBox fx:id="gameMode" layoutX="215.0" layoutY="62.0" prefWidth="150.0">
          <items>
             <FXCollections fx:factory="observableArrayList">
                <String fx:value="SinglePlayer" />
@@ -52,17 +52,18 @@
                <Glow />
             </effect>
          </Text>
-         <Button fx:id="endGame" layoutX="319.0" layoutY="427.0" mnemonicParsing="false" onAction="#endGame" text="End Game" textFill="#155920">
+         <Button fx:id="endGame" layoutX="319.0" layoutY="427.0" mnemonicParsing="false" onAction="#endGame" text="End Game" textFill="#590003">
             <font>
                <Font name="System Italic" size="12.0" />
             </font>
          </Button>
-         <MenuButton fx:id ="symbolMenu" layoutX="70.0" layoutY="427.0" mnemonicParsing="false" text="Choose X or O" disable="true">
+         <MenuButton fx:id="symbolMenu" disable="true" layoutX="100.0" layoutY="62.0" mnemonicParsing="false" text="Choose X or O">
            <items>
              <MenuItem fx:id="symbolChoiceX" mnemonicParsing="false" onAction="#symbolChoice" text="X" />
              <MenuItem fx:id="symbolChoiceO" mnemonicParsing="false" onAction="#symbolChoice" text="O" />
            </items>
          </MenuButton>
+         <Button fx:id="startGame" disable="true" layoutX="100.0" layoutY="427.0" mnemonicParsing="false" onAction="#startGame" text="Start Game" textFill="#155920"/>
       </AnchorPane>
    </center>
    <right>
@@ -72,5 +73,3 @@
       </VBox>
    </right>
 </BorderPane>
-
-

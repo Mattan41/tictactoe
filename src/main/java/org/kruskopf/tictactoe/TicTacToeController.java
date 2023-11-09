@@ -18,6 +18,8 @@ import java.net.http.HttpResponse;
 public class TicTacToeController {
 
     @FXML
+    private Button startGame;
+    @FXML
     private MenuButton symbolMenu;
     @FXML
     private MenuItem symbolChoiceO;
@@ -116,6 +118,7 @@ public class TicTacToeController {
         playerScoreLabel.textProperty().bind(model.PlayerScoreProperty());
         winner.textProperty().bind(model.winnerProperty());
         Bindings.bindBidirectional(startRound.disableProperty(), model.restartRoundProperty());
+        Bindings.bindBidirectional(startGame.disableProperty(), model.startGameProperty());
         Bindings.bindBidirectional(endGame.disableProperty(), model.endGameProperty());
         Bindings.bindBidirectional(gameMode.disableProperty(), model.gameModeProperty());
         gameMode.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setGameMode(newValue));
@@ -126,11 +129,14 @@ public class TicTacToeController {
         if (newValue != null && newValue.equals("SinglePlayer")) {
             model.setSinglePlayerMode(true);
             model.ifComputerTurn();
+            modalBox.setVisible(false);
 
         } else if (newValue != null && newValue.equals("MultiPlayer")) {
 
             model.setSinglePlayerMode(false);
             modalBox.setVisible(true);
+
+
         }
         symbolMenu.setDisable(false);
     }
@@ -143,7 +149,6 @@ public class TicTacToeController {
         int col = GridPane.getColumnIndex(button);
         int index = (row * 3) + col;
 
-
         model.setSymbolAndDisable(index);
     }
 
@@ -154,13 +159,19 @@ public class TicTacToeController {
         model.setSymbolChoiceForPlayer2(symbol.equals("X") ? "O" : "X");
 
         symbolMenu.setDisable(true);
-        startRound.setDisable(false);
+        startGame.setDisable(false);
     }
 
     public void restartRound(ActionEvent event) {
         model.resetBoard();
         startRound.setDisable(true);
         gameMode.setDisable(true);
+    }
+
+    public void startGame(ActionEvent actionEvent) {
+        model.startGame();
+        startRound.setDisable(false);
+        startGame.setDisable(true);
     }
 
     public void endGame(ActionEvent actionEvent) {
@@ -170,16 +181,17 @@ public class TicTacToeController {
         symbolMenu.setDisable(false);
         hostGameButton.setDisable(false);
         joinGameButton.setDisable(false);
+        startGame.setDisable(false);
     }
-
 
     public void hostGame(ActionEvent actionEvent) {
         model.setGameHost(true);
         hostGameButton.setDisable(true);
         joinGameButton.setDisable(true);
     }
+
     public void joinGame(ActionEvent actionEvent) {
-        model.setGameHost(true);
+        model.setGameHost(false);
         hostGameButton.setDisable(true);
         joinGameButton.setDisable(true);
 

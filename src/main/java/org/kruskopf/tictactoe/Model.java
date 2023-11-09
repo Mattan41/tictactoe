@@ -15,6 +15,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Model {
 
@@ -29,6 +32,7 @@ public class Model {
     private StringProperty winner = new SimpleStringProperty("tic-tac-toe");
     private StringProperty playerScore = new SimpleStringProperty("Player 1: " + player1Score + " points\nPlayer 2: " + player2Score + " points");
     private BooleanProperty restartRound = new SimpleBooleanProperty(true);
+    private BooleanProperty startGame = new SimpleBooleanProperty(true);
     private BooleanProperty endGame = new SimpleBooleanProperty(false);
     private BooleanProperty gameMode = new SimpleBooleanProperty(false);
     private Random random;
@@ -93,6 +97,7 @@ public class Model {
         for (int i = 0; i < board.length; i++) {
             board[i] = new SimpleStringProperty(" ");
         }
+        startGame = startGameProperty();
         restartRound = restartRoundProperty();
         random = new Random();
     }
@@ -138,6 +143,9 @@ public class Model {
     }
     public BooleanProperty restartRoundProperty(){
         return restartRound;
+    }
+    public BooleanProperty startGameProperty(){
+        return startGame;
     }
     public StringProperty winnerProperty() {
         return winner;
@@ -250,7 +258,9 @@ public class Model {
         player2Score=0;
         setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +" points");
         gameMode.set(false);
-        playerTurn = PlayerTurn.PLAYER1;
+        playerTurn = PlayerTurn.PLAYER1; //TODO: ta bort denna
+        if(singlePlayer)
+            stopGame();
 
     }
 
@@ -301,11 +311,24 @@ public class Model {
         sendMessageToServer(player, index);
     }
 
+    private ScheduledExecutorService executorService;
+    private final String MESSAGE_URL = "https://ntfy.sh/M4TS_F4NT4STISK4_SPEL/raw";
+
+    public void startGame() {
+        if (!singlePlayer) {
+            executorService = Executors.newSingleThreadScheduledExecutor();
+            executorService.scheduleAtFixedRate(this::receiveMessage, 0, 1, TimeUnit.SECONDS);
+        }
+    }
+    public void stopGame() {
+        executorService.shutdown();
+    }
+
     private void receiveMessage() {
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://ntfy.sh/M4TS_F4NT4STISK4_SPEL/raw"))
+                .uri(URI.create(MESSAGE_URL))
                 .build();
 
         client.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
@@ -315,26 +338,20 @@ public class Model {
                     reader.lines().forEach(line -> {
 
                         int index = getIndexPosition(line);
-                        Platform.runLater(() -> {
-                            try {
-                                setSymbolAndDisable(index);
-                            } catch (IOException | InterruptedException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
+
+                            if (line.startsWith("P1:"))
+                                Platform.runLater(() -> setSymbolAndDisableForPlayer1(index));
+                            else if(line.startsWith("P2:"))
+                                Platform.runLater(() -> setSymbolAndDisableForPlayer2(index));
+
                     });
                 });
+
     }
 
     public static int getIndexPosition(String line) {
-
-        int index=0;
-
-        if (line.startsWith("P1:"))
-            index = Integer.parseInt(line.substring(line.length() - 1));
-         else if(line.startsWith("P2:"))
-            index = Integer.parseInt(line.substring(line.length() - 1));
-
+        int index;
+        index = Integer.parseInt(line.substring(line.length() - 1));
         return index;
     }
 
