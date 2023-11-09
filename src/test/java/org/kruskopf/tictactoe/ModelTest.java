@@ -14,8 +14,8 @@ class ModelTest {
     Model model = new Model();
 
     @Test
-    @DisplayName("check for valid moves")
-    void checkForValidMoves() {
+    @DisplayName("check for valid moves Button 9 should be True")
+    void checkForValidMovesButton9ShouldBeTrue() {
 
         //Arrange
         model.resetBoard();
@@ -29,17 +29,36 @@ class ModelTest {
 
 
         //Act
-        Boolean button7 = model.board[6].get().isEmpty();
         Boolean button9 = model.board[8].get().isEmpty();
         //Assert
         assertThat(button9).isTrue();
+
+    }
+
+    @Test
+    @DisplayName("check for valid moves Button 7 should be False")
+    void checkForValidMovesButton7ShouldBeFalse() {
+
+        //Arrange
+        model.resetBoard();
+        model.board[0].set("O");
+        model.board[1].set("X");
+        model.board[2].set("O");
+        model.board[3].set("O");
+        model.board[4].set("X");
+        model.board[5].set("X");
+        model.board[6].set("X");
+
+
+        Boolean button7 = model.board[6].get().isEmpty();
+
         assertThat(button7).isFalse();
     }
 
 
     @Test
-    @DisplayName("check if game is over when three in row")
-    void checkIfGameIsOverWhenThreeInRow() {
+    @DisplayName("check if game is over when three same symbols in row")
+    void checkIfGameIsOverWhenThreeSameSymbolsInRow() {
         model.resetBoard();
         model.board[0].set("O");
         model.board[1].set("O");
