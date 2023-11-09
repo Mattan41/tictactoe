@@ -308,6 +308,12 @@ public class Model {
     }
 
 
+    public void stopGame() {
+        if (messageThread != null) {
+            messageThread.interrupt(); // stoppa tråden som körs av receiveMessage
+        }
+    }
+
     private Thread messageThread;
 
     public void startGame() {
@@ -317,13 +323,6 @@ public class Model {
         }
     }
 
-    public void stopGame() {
-        if (messageThread != null) {
-            messageThread.interrupt(); // stoppa tråden som körs av receiveMessage
-        }
-    }
-
-
     private void receiveMessage() {
         HttpClient client = HttpClient.newHttpClient();
 
@@ -331,21 +330,27 @@ public class Model {
                 .uri(URI.create("https://ntfy.sh/M4TS_F4NT4STISK4_SPEL"))
                 .build();
 
-        client.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
-                .thenApply(HttpResponse::body)
-                .thenAccept(inputStream -> {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                    reader.lines().forEach(line -> {
+        messageThread = new Thread(() -> {
+            while (true) {
+                client.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
+                        .thenApply(HttpResponse::body)
+                        .thenAccept(inputStream -> {
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                            reader.lines().forEach(line -> {
 
-                        int index = getIndexPosition(line);
+                                int index = getIndexPosition(line);
 
-                        if (line.startsWith("P1:")) {
-                            Platform.runLater(() -> setSymbolAndDisableForPlayer1(index));
-                        } else if (line.startsWith("P2:")) {
-                            Platform.runLater(() -> setSymbolAndDisableForPlayer2(index));
-                        }
-                    });
-                });
+                                if (line.startsWith("P1:")) {
+                                    Platform.runLater(() -> setSymbolAndDisableForPlayer1(index));
+                                } else if (line.startsWith("P2:")) {
+                                    Platform.runLater(() -> setSymbolAndDisableForPlayer2(index));
+                                }
+                            });
+                        });
+
+            }
+        });
+
     }
 
     public int getIndexPosition(String line) {
