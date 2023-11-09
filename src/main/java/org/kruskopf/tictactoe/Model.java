@@ -15,9 +15,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class Model {
 
@@ -123,7 +120,6 @@ public class Model {
             board[index].set(player2.getSymbol());
             playerTurn = PlayerTurn.PLAYER1;
         }
-
 
         checkForDrawOrWinnerOfRound();
 
@@ -311,24 +307,28 @@ public class Model {
         sendMessageToServer(player, index);
     }
 
-    private ScheduledExecutorService executorService;
-    private final String MESSAGE_URL = "https://ntfy.sh/M4TS_F4NT4STISK4_SPEL/raw";
+
+    private Thread messageThread;
 
     public void startGame() {
         if (!singlePlayer) {
-            executorService = Executors.newSingleThreadScheduledExecutor();
-            executorService.scheduleAtFixedRate(this::receiveMessage, 0, 1, TimeUnit.SECONDS);
+            messageThread = new Thread(this::receiveMessage);
+            messageThread.start(); // starta läsning av meddelanden
         }
     }
+
     public void stopGame() {
-        executorService.shutdown();
+        if (messageThread != null) {
+            messageThread.interrupt(); // stoppa tråden som körs av receiveMessage
+        }
     }
+
 
     private void receiveMessage() {
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(MESSAGE_URL))
+                .uri(URI.create("https://ntfy.sh/M4TS_F4NT4STISK4_SPEL"))
                 .build();
 
         client.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
@@ -339,17 +339,16 @@ public class Model {
 
                         int index = getIndexPosition(line);
 
-                            if (line.startsWith("P1:"))
-                                Platform.runLater(() -> setSymbolAndDisableForPlayer1(index));
-                            else if(line.startsWith("P2:"))
-                                Platform.runLater(() -> setSymbolAndDisableForPlayer2(index));
-
+                        if (line.startsWith("P1:")) {
+                            Platform.runLater(() -> setSymbolAndDisableForPlayer1(index));
+                        } else if (line.startsWith("P2:")) {
+                            Platform.runLater(() -> setSymbolAndDisableForPlayer2(index));
+                        }
                     });
                 });
-
     }
 
-    public static int getIndexPosition(String line) {
+    public int getIndexPosition(String line) {
         int index;
         index = Integer.parseInt(line.substring(line.length() - 1));
         return index;
