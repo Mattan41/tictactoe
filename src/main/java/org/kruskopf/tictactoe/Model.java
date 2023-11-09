@@ -36,16 +36,16 @@ public class Model {
 
     private boolean singlePlayer;
 
+    private boolean gameOver;
+
+    private boolean gameHost;
+
     public boolean isGameOver() {
         return gameOver;
     }
-
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
-
-    private boolean gameOver;
-    private boolean gameHost;
 
     public boolean isGameHost() {
         return gameHost;
@@ -124,8 +124,6 @@ public class Model {
         checkForDrawOrWinnerOfRound();
 
     }
-
-
 
     public StringProperty PlayerScoreProperty() {
         return playerScore;
@@ -284,11 +282,7 @@ public class Model {
     public void setSymbolAndDisable(int index) throws IOException, InterruptedException {
 
             if (!isSinglePlayer()) {
-                //TODO: Lägga till om man är Server/Host på modellen, sortering i modellen beroende på vilken roll, även singel/multiplayer där?
-                //TODO: om man är klient/join köra HttpPublish i modellen. Om man är Host uppdatera modellen. behöver starta Consume för att ta emot alla
-                //TODO if Host model.setSymbolAndDisableForPlayer1(index);
-                //TODO if Join model.setSymbolAndDisableForPlayer2(index);
-                //senMessageToServer fungerar utanför if-satser, något med gameHost
+
                 if (!isGameHost()) {
                     String player= "P2:";
                     sendMessage(index, player);
@@ -337,15 +331,22 @@ public class Model {
                         .thenAccept(inputStream -> {
                             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                             reader.lines().forEach(line -> {
-
-                                int index = getIndexPosition(line);
-
-                                if (line.startsWith("P1:")) {
-                                    Platform.runLater(() -> setSymbolAndDisableForPlayer1(index));
-                                } else if (line.startsWith("P2:")) {
-                                    Platform.runLater(() -> setSymbolAndDisableForPlayer2(index));
+                                if (line.startsWith("P1:") || line.startsWith("P2:")) {
+                                    try {
+                                        int index = Integer.parseInt(line.substring(3));
+                                        if (index >= 0 && index <= 8) {
+                                            if (line.startsWith("P1:")) {
+                                                Platform.runLater(() -> setSymbolAndDisableForPlayer1(index));
+                                            } else {
+                                                Platform.runLater(() -> setSymbolAndDisableForPlayer2(index));
+                                            }
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        System.err.println("Invalid message format: " + line);
+                                    }
                                 }
                             });
+
                         });
 
             }
