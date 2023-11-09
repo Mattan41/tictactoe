@@ -87,6 +87,7 @@ public class Model {
     }
 
 
+
     public Model() {
 
         player1 = new Player("");
@@ -101,6 +102,48 @@ public class Model {
     }
 
 
+    public StringProperty PlayerScoreProperty() {
+        return playerScore;
+    }
+
+    public BooleanProperty endGameProperty() {
+        return endGame;
+    }
+
+    public BooleanProperty gameModeProperty() {
+        return gameMode;
+    }
+
+    public BooleanProperty restartRoundProperty(){
+        return restartRound;
+    }
+    public BooleanProperty startGameProperty(){
+        return startGame;
+    }
+    public StringProperty winnerProperty() {
+        return winner;
+    }
+    public void setPlayerScore(String playerScore) {
+        this.playerScore.set(playerScore);
+    }
+
+    public void setSymbolAndDisable(int index) throws IOException, InterruptedException {
+
+        if (!isSinglePlayer()) {
+
+            if (!isGameHost()) {
+                String player= "P2:";
+                sendMessage(index, player);
+            } else if (isGameHost()) {
+                String player= "P1:";
+                sendMessage(index, player);
+                setSymbolAndDisableForPlayer1(index);
+            }
+        }
+        else if (isSinglePlayer()) {
+            setSymbolAndDisableForPlayer1(index);
+        }
+    }
     public void setSymbolAndDisableForPlayer1(int index) {
         if (playerTurn == PlayerTurn.PLAYER2) {
             return;
@@ -114,7 +157,6 @@ public class Model {
         if (!isGameOver())
             ifComputerTurn();
     }
-
     public void setSymbolAndDisableForPlayer2(int index) {
         if (playerTurn == PlayerTurn.PLAYER1)
             return;
@@ -127,39 +169,34 @@ public class Model {
 
     }
 
-    public StringProperty PlayerScoreProperty() {
-        return playerScore;
+    public boolean isComputerTurn() {
+        return singlePlayer && playerTurn == PlayerTurn.PLAYER2;
     }
+    public void ifComputerTurn() {
+        if (isComputerTurn()) {
 
-    public BooleanProperty endGameProperty() {
-        return endGame;
-    }
-    public BooleanProperty gameModeProperty() {
-        return gameMode;
-    }
-    public BooleanProperty restartRoundProperty(){
-        return restartRound;
-    }
-    public BooleanProperty startGameProperty(){
-        return startGame;
-    }
-    public StringProperty winnerProperty() {
-        return winner;
-    }
+            int randomIndex;
+            int index;
 
-    public void setPlayerScore(String playerScore) {
-        this.playerScore.set(playerScore);
+            do {
+                randomIndex = random.nextInt(9);
+            } while (!board[randomIndex].get().isEmpty());
+
+            index = randomIndex;
+
+            Timeline timeline = new Timeline(new KeyFrame(
+                    Duration.millis(500 + (Math.random() * 1000)),
+                    ae -> setSymbolAndDisableForPlayer2(index)));
+            timeline.play();
+
+        }
     }
-
-
-
 
     public void checkForDrawOrWinnerOfRound() {
 
         checkForDrawRound();
         checkForWinnerOfRound();
     }
-
     public void checkForWinnerOfRound() {
         for (int i = 0; i < 8; i++) {
 
@@ -190,17 +227,16 @@ public class Model {
 
         }
     }
-
     private void checkForDrawRound() {
         if (roundIsDraw()){
             winner.set("It's a draw!");
             roundOver();
         }
     }
-
     public boolean roundIsDraw() {
         return Arrays.stream(board).noneMatch(s -> s.get().isEmpty());
     }
+
 
     public void roundOver() {
         for (StringProperty stringProperty : board) {
@@ -211,7 +247,6 @@ public class Model {
         restartRound.set(false);
         setGameOver(true);
     }
-
    public void resetBoard() {
        for (StringProperty stringProperty : board) {
            stringProperty.set("");
@@ -220,31 +255,6 @@ public class Model {
        ifComputerTurn();
        setGameOver(false);
    }
-
-
-    public boolean isComputerTurn() {
-       return singlePlayer && playerTurn == PlayerTurn.PLAYER2;
-    }
-
-    public void ifComputerTurn() {
-        if (isComputerTurn()) {
-
-            int randomIndex;
-            int index;
-
-            do {
-                randomIndex = random.nextInt(9);
-            } while (!board[randomIndex].get().isEmpty());
-
-            index = randomIndex;
-
-            Timeline timeline = new Timeline(new KeyFrame(
-                    Duration.millis(500 + (Math.random() * 1000)),
-                    ae -> setSymbolAndDisableForPlayer2(index)));
-             timeline.play();
-
-        }
-    }
 
     public void endGameAndDeclareWinner() {
         if (player1Score>player2Score)
@@ -258,7 +268,7 @@ public class Model {
         player2Score=0;
         setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +" points");
         gameMode.set(false);
-        playerTurn = PlayerTurn.PLAYER1; //TODO: ta bort denna?
+        playerTurn = PlayerTurn.PLAYER1; //TODO: ta bort denna? slumpa playerTurn?
         if(singlePlayer)
             stopGame(); //Todo:stoppa readMessage?
 
@@ -278,6 +288,18 @@ public class Model {
             player2.setSymbol(symbol);
     }
 
+    public void startGame() {
+        if (!singlePlayer) {
+            messageThread = new Thread(this::receiveMessage);
+            messageThread.start(); // starta läsning av meddelanden
+        }
+    }
+    public void stopGame() {
+        if (messageThread != null) {
+            messageThread.interrupt(); // stoppa tråden som körs av receiveMessage
+        }
+    }
+
     public void sendMessageToServer(String player, int index) throws IOException, InterruptedException {
         String positionAtBoard = String.valueOf(index);
         HttpClient client = HttpClient.newHttpClient();
@@ -290,43 +312,9 @@ public class Model {
         HttpResponse<Void> response =
                 client.send(request,HttpResponse.BodyHandlers.discarding());
     }
-
-    public void setSymbolAndDisable(int index) throws IOException, InterruptedException {
-
-            if (!isSinglePlayer()) {
-
-                if (!isGameHost()) {
-                    String player= "P2:";
-                    sendMessage(index, player);
-                } else if (isGameHost()) {
-                    String player= "P1:";
-                    sendMessage(index, player);
-                    setSymbolAndDisableForPlayer1(index);
-                }
-            }
-            else if (isSinglePlayer()) {
-            setSymbolAndDisableForPlayer1(index);
-        }
-    }
-
-
     private void sendMessage(int index, String player) throws IOException, InterruptedException {
         sendMessageToServer(player, index);
     }
-
-    public void stopGame() {
-        if (messageThread != null) {
-            messageThread.interrupt(); // stoppa tråden som körs av receiveMessage
-        }
-    }
-
-    public void startGame() {
-        if (!singlePlayer) {
-            messageThread = new Thread(this::receiveMessage);
-            messageThread.start(); // starta läsning av meddelanden
-        }
-    }
-
 
     private void receiveMessage() {
         HttpClient client = HttpClient.newHttpClient();
@@ -369,8 +357,6 @@ public class Model {
             }
         });
     }
-
-
     public int getIndexPosition(String line) {
         return Integer.parseInt(line.substring(3));
 
