@@ -321,11 +321,17 @@ public class Model {
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://ntfy.sh/M4TS_F4NT4STISK4_SPEL"))
+                .uri(URI.create("https://ntfy.sh/M4TS_F4NT4STISK4_SPEL/raw"))
                 .build();
 
         messageThread = new Thread(() -> {
             while (true) {
+                try {
+                    Thread.sleep(1000); // Wait for 1 second
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 client.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
                         .thenApply(HttpResponse::body)
                         .thenAccept(inputStream -> {
@@ -348,11 +354,10 @@ public class Model {
                             });
 
                         });
-
             }
         });
-
     }
+
 
     public int getIndexPosition(String line) {
         int index;
