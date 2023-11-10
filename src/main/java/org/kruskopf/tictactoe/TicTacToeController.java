@@ -159,24 +159,19 @@ public class TicTacToeController {
 
     public void restartRound(ActionEvent event) {
         model.resetBoard();
-        startRound.setDisable(true);
-        gameMode.setDisable(true);
     }
 
     public void startGame(ActionEvent actionEvent) {
         model.startGame();
-        startRound.setDisable(false);
-        startGame.setDisable(true);
     }
 
     public void endGame(ActionEvent actionEvent) {
-        model.endGameAndDeclareWinner();
         model.roundOver();
-        startRound.setDisable(true);
+        model.endGameAndDeclareWinner();
         symbolMenu.setDisable(false);
         hostGameButton.setDisable(false);
         joinGameButton.setDisable(false);
-        startGame.setDisable(false);
+
     }
 
     public void hostGame(ActionEvent actionEvent) {

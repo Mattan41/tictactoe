@@ -244,19 +244,27 @@ public class Model {
                 stringProperty.set(" ");
         }
         setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +" points");
-        restartRound.set(false);
+        restartRoundProperty().set(false);
         setGameOver(true);
     }
    public void resetBoard() {
        for (StringProperty stringProperty : board) {
            stringProperty.set("");
        }
-        winner.set("Tic-Tac-Toe");
+
+       winner.set("Tic-Tac-Toe");
+
        ifComputerTurn();
        setGameOver(false);
+       gameModeProperty().set(true);
+       restartRoundProperty().set(true);
    }
 
     public void endGameAndDeclareWinner() {
+
+        restartRoundProperty().set(true);
+        startGameProperty().set(false);
+
         if (player1Score>player2Score)
             winner.set("Player1 won: " + player1Score + "-" + player2Score);
         else if (player1Score<player2Score)
@@ -266,11 +274,16 @@ public class Model {
 
         player1Score=0;
         player2Score=0;
+
         setPlayerScore("Player 1: " + player1Score + " points\nPlayer 2: "+ player2Score +" points");
+
         gameMode.set(false);
+
         playerTurn = PlayerTurn.PLAYER1; //TODO: ta bort denna? slumpa playerTurn?
+
+
         if(singlePlayer)
-            stopGame(); //Todo:stoppa readMessage?
+            stopGame(); //Todo:stoppa readMessage eller låta tråden vara igång?
 
     }
 
@@ -289,6 +302,8 @@ public class Model {
     }
 
     public void startGame() {
+        startGameProperty().set(true);
+        restartRoundProperty().set(false);
         if (!singlePlayer) {
             messageThread = new Thread(this::receiveMessage);
             messageThread.start(); // starta läsning av meddelanden
@@ -298,6 +313,7 @@ public class Model {
         if (messageThread != null) {
             messageThread.interrupt(); // stoppa tråden som körs av receiveMessage
         }
+
     }
 
     public void sendMessageToServer(String player, int index) throws IOException, InterruptedException {
