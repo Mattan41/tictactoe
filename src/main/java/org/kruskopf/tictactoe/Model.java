@@ -86,7 +86,7 @@ public class Model {
         this.singlePlayer = singlePlayer;
     }
 
-
+    HttpClient client = HttpClient.newHttpClient();
 
     public Model() {
 
@@ -282,9 +282,6 @@ public class Model {
         playerTurn = PlayerTurn.PLAYER1; //TODO: ta bort denna? slumpa playerTurn?
 
 
-        if(singlePlayer)
-            stopGame(); //Todo:stoppa readMessage eller låta tråden vara igång?
-
     }
 
     public void setSymbolChoiceForPlayer(String symbol) {
@@ -305,16 +302,10 @@ public class Model {
         startGameProperty().set(true);
         restartRoundProperty().set(false);
         if (!singlePlayer) {
-            messageThread = new Thread(this::receiveMessage);
-            messageThread.start(); // starta läsning av meddelanden
+            startReceivingMessage();
         }
     }
-    public void stopGame() {
-        if (messageThread != null) {
-            messageThread.interrupt(); // stoppa tråden som körs av receiveMessage
-        }
 
-    }
 
     public void sendMessageToServer(String player, int index) throws IOException, InterruptedException {
         String positionAtBoard = String.valueOf(index);
@@ -332,20 +323,13 @@ public class Model {
         sendMessageToServer(player, index);
     }
 
-    private void receiveMessage() {
-        HttpClient client = HttpClient.newHttpClient();
+    private void startReceivingMessage() {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://ntfy.sh/M4TS_F4NT4STISK4_SPEL/raw"))
                 .build();
 
         messageThread = new Thread(() -> {
-            while (true) {
-                try {
-                    Thread.sleep(1000); // Wait for 1 second
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
                 client.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
                         .thenApply(HttpResponse::body)
@@ -355,13 +339,8 @@ public class Model {
                                 if (line.startsWith("P1:") || line.startsWith("P2:")) {
                                     try {
                                         int index = getIndexPosition(line);
-                                        if (index >= 0 && index <= 8) {
-                                            if (line.startsWith("P1:")) {
-                                                Platform.runLater(() -> setSymbolAndDisableForPlayer1(index));
-                                            } else {
-                                                Platform.runLater(() -> setSymbolAndDisableForPlayer2(index));
-                                            }
-                                        }
+                                        if (index >= 0 && index <= 8)
+                                            setSymbolsForPlayersWithPlatformRunLater(line, index);
 
                                     } catch (NumberFormatException e) {
                                         System.err.println("Invalid message format: " + line);
@@ -370,12 +349,21 @@ public class Model {
                             });
 
                         });
-            }
+
         });
+        messageThread.start(); // starta läsning av meddelanden
     }
+
+    private void setSymbolsForPlayersWithPlatformRunLater(String line, int index) {
+        if (line.startsWith("P1:")) {
+            Platform.runLater(() -> setSymbolAndDisableForPlayer1(index));
+        } else {
+            Platform.runLater(() -> setSymbolAndDisableForPlayer2(index));
+        }
+    }
+
     public int getIndexPosition(String line) {
         return Integer.parseInt(line.substring(3));
-
     }
 
 }
