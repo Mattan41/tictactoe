@@ -65,10 +65,8 @@ class ModelTest {
         model.board[2].set("O");
 
         model.checkForDrawOrWinnerOfRound();
-        boolean noMoreMoves = Arrays.stream(model.board)
-                .noneMatch(s -> s.get().isEmpty());
 
-        assertThat(noMoreMoves).isTrue();
+        assertThat(model.board).noneMatch(s -> s.get().isEmpty());
     }
     @Test
     @DisplayName("check if there is a winner")
